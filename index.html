@@ -666,12 +666,10 @@ function applyLanguage(lang) {
   wrapper.classList.add('fullscreen');
   
   if (!(dayHasCome() || isTestEnv())) {
-      offset = video.duration - 2;
-    }
-    
+      offset = JSON.parse(JSON.stringify(video.duration)) - 3;
+  }
 
   video.ontimeupdate = () => {
-    
     if (video.duration && video.currentTime >= video.duration - offset) {
       video.pause();
       video.currentTime = video.duration - offset;
