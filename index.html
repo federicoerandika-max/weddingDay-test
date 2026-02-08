@@ -427,14 +427,21 @@
 
     <button class="ig-button" onclick="openInstagram()" id="shareOnInstagram">
     </button>
-
+    <br>
     <button id="wedshootsBtn"
         class="action-btn"
         data-i18n="wedshoots_btn" onclick="onClickShareAPhoto()">
     </button>
+    <br>   
   </div>
 
   <div class="info-buttons fade-in-up" id="info-buttons">
+  <div id="btn-timeline" class="hidden">
+      <button onclick="window.location.href='pages/timeline.html'">
+        <span id="timeline"></span>
+      </button>
+      <br>
+    </div>
     <button onclick="openMaps()">📍 <span id="btnLocation"></span></button>
     <button onclick="addToCalendar()">
       <img src="assets/img/june-11-calendar.png" alt="calendar icon" width="50" height="50" style="
@@ -533,7 +540,8 @@ const translations = {
       Condividi i tuoi scatti 📸<br>
       <small> (il codice è già copiato dovrai solo incollarlo) </small>
     `,
-    formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨'
+    formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
+    timeline: 'Segui la Timeline dell\'evento 🕒'
   },
   en: {
     title: "We’re getting married 💍",
@@ -578,7 +586,8 @@ const translations = {
         Share your photos 📸<br>
         <small> (the code is already copied, you just need to paste it) </small>
     `,
-    formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨'
+    formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
+    timeline: 'Follow the timeline of the event 🕒'
   },
   
 };
@@ -631,6 +640,7 @@ function applyLanguage(lang) {
   document.getElementById('wedshootsBtn').innerHTML = t.wedshoots_btn;
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
+  document.getElementById('timeline').innerHTML = t.timeline;
   
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
@@ -867,10 +877,12 @@ function activateWeddingFeatures() {
   const now = new Date();
 
   if ((now >= weddingDate) || isTestEnv()) {
+    const btnTimeline = document.getElementById("btn-timeline");
     const igSection = document.getElementById("instagramShare");
     const gallery = document.getElementById("hashtagGallery");
     igSection.classList.remove("hidden");
     gallery.classList.remove("hidden");
+    btnTimeline.classList.remove("hidden");
     vibrateOnReveal();
     AOS.refresh();
   }
@@ -885,6 +897,8 @@ function countDownForm() {
     moduleForm.style.display = "none";
     const formTitle = document.getElementById('formTitle');
     formTitle.style.display = "none";
+    const intro = document.getElementById('intro');
+    intro.style.display = "none";
   }
 }
 
@@ -917,7 +931,7 @@ function onClickShareAPhoto() {
 }
 
 function isTestEnv() {
-  return window.location.href.includes('test');
+  return window.location.href.includes('test') || window.location.href.includes('personal');
 }
 
 function dayHasCome() {
