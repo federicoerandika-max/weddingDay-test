@@ -651,7 +651,7 @@ function applyLanguage(lang) {
 
   videoSource.src = videoPath + (lang === 'en' ? 'video-en.mp4' : 'video-it.mp4');
 
-  const offset = 1; // secondi prima della fine
+  let offset = 1; // secondi prima della fine
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
@@ -662,13 +662,16 @@ function applyLanguage(lang) {
   video.onended = null;
   video.ontimeupdate = null;
   
-  if (!(dayHasCome() || isTestEnv())) {
-    document.body.classList.add('lock-scroll');
-    wrapper.classList.add('fullscreen');
-  }
+  document.body.classList.add('lock-scroll');
+  wrapper.classList.add('fullscreen');
   
+  if (!(dayHasCome() || isTestEnv())) {
+      offset = video.duration - 2;
+    }
+    
 
   video.ontimeupdate = () => {
+    
     if (video.duration && video.currentTime >= video.duration - offset) {
       video.pause();
       video.currentTime = video.duration - offset;
