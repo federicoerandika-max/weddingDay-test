@@ -647,7 +647,7 @@ function applyLanguage(lang) {
   const video = document.getElementById('weddingVideo');
   video.load();
   video.play();
-  if (!window.location.href.includes('github.io')) {
+  if (isTestEnv()) {
     video.playbackRate = 4.0;
   }
   const wrapper = document.querySelector('.video-wrapper');
@@ -910,6 +910,10 @@ function onClickShareAPhoto() {
   }
 
   window.open(wedshootsUrl, "_blank");
+}
+
+function isTestEnv() {
+  return window.location.href.includes('test');
 }
 
 </script>
