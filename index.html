@@ -864,7 +864,7 @@ function vibrateOnReveal() {
 function activateWeddingFeatures() {
   const now = new Date();
 
-  if (now >= weddingDate) {
+  if ((now >= weddingDate) || isTestEnv()) {
     const igSection = document.getElementById("instagramShare");
     const gallery = document.getElementById("hashtagGallery");
     igSection.classList.remove("hidden");
