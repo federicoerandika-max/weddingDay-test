@@ -878,7 +878,7 @@ function countDownForm() {
   // hiding form after deadline (30 May 2026, 14:30 Europe/Rome time)
   const formEndingDate = new Date("2026-05-30T14:30:00+02:00"); // Europe/Rome (DST)
   const now = new Date();
-  if (now >= formEndingDate) {
+  if ((now >= formEndingDate) || isTestEnv()) {
     const moduleForm = document.getElementById("moduleForm");
     moduleForm.style.display = "none";
   }
