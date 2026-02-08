@@ -424,8 +424,6 @@
   <div id="instagramShare" class="instagram-share hidden" data-aos="zoom-in">
     <p style="margin-top:12px; font-size:0.85rem; opacity:0.7;" id="tagAdvice">
     </p>
-    <p class="share-text" id="shareText">
-    </p>
 
     <button class="ig-button" onclick="openInstagram()" id="shareOnInstagram">
     </button>
@@ -522,14 +520,10 @@ const translations = {
     iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
     copy: "Tocca per copiare",
     closeButton: 'Chiudi',
-    name: "INTESTATARIO: FEDERICO HARIN ATTYGALA",
+    name: "INTESTATARIO: <br> FEDERICO HARIN ATTYGALA",
     footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
     tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
     shareOnInstagram: "Condividi su Instagram 📸 ",
-    shareText: `
-      Il grande giorno è arrivato 💍✨<br>
-      Condividi una foto e festeggia con noi!
-    `,
     publishedPhotos: `
       Tutte le foto pubblicate con<br>
       <strong>#ErandikaFedericoWedding2026</strong>
@@ -538,7 +532,8 @@ const translations = {
     wedshoots_btn: `
       Condividi i tuoi scatti 📸<br>
       <small> (il codice è già copiato dovrai solo incollarlo) </small>
-    `
+    `,
+    formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨'
   },
   en: {
     title: "We’re getting married 💍",
@@ -570,23 +565,22 @@ const translations = {
     iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
     copy: "Click to copy",
     closeButton: 'Close',
-    name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA",
+    name: "ACCOUNT HOLDER: <br> HARIN FEDERICO ATTYGALA",
     footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
     tagAdvice: `tag us <strong id="tagEra">@erandikaconthrath</strong> & <strong id="tagFede">@harinfederico</strong>`,
     shareOnInstagram: "Share on Instagram 📸",
-    shareText: `
-      The big day has arrived 💍✨<br>
-      Share a photo and celebrate with us!
-    `,
     publishedPhotos: `
       All the photos shared with<br>
       <strong>#ErandikaFedericoWedding2026</strong>
     `,
     hashtagGalleryTitle: "Shared moments ❤️",
     wedshoots_btn: `
-            Share your photos 📸<br>
-            <small> (the code is already copied, you just need to paste it) </small>`
-  }
+        Share your photos 📸<br>
+        <small> (the code is already copied, you just need to paste it) </small>
+    `,
+    formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨'
+  },
+  
 };
 
 var globalLanguage = {};
@@ -618,7 +612,12 @@ function applyLanguage(lang) {
   document.getElementById('formTitle').innerHTML = t.formTitle;
   document.getElementById('locationLabel').innerHTML = t.location;
   document.getElementById('dateLabel').innerHTML = t.date;
-  document.getElementById('futureUpdates').innerHTML = t.futureUpdates;
+  if (dayHasCome() || isTestEnv()) {
+    // change future updates text
+    document.getElementById('futureUpdates').innerHTML = t.formRevealed;
+  } else {
+    document.getElementById('futureUpdates').innerHTML = t.futureUpdates;
+  }
   document.getElementById('addHomeTitle').innerHTML = t.addHomeTitle;
   document.getElementById('addHomeIntro').innerHTML = t.addHomeIntro;
   document.getElementById('iosSteps').innerHTML = t.iosSteps;
@@ -630,7 +629,6 @@ function applyLanguage(lang) {
   document.getElementById('tagAdvice').innerHTML = t.tagAdvice;
   document.getElementById('shareOnInstagram').innerHTML = t.shareOnInstagram;
   document.getElementById('wedshootsBtn').innerHTML = t.wedshoots_btn;
-  document.getElementById('shareText').innerHTML = t.shareText;
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
   
@@ -881,6 +879,8 @@ function countDownForm() {
   if ((now >= formEndingDate) || isTestEnv()) {
     const moduleForm = document.getElementById("moduleForm");
     moduleForm.style.display = "none";
+    const formTitle = document.getElementById('formTitle');
+    formTitle.style.display = "none";
   }
 }
 
@@ -914,6 +914,11 @@ function onClickShareAPhoto() {
 
 function isTestEnv() {
   return window.location.href.includes('test');
+}
+
+function dayHasCome() {
+  const now = new Date();
+  return now >= weddingDate;
 }
 
 </script>
