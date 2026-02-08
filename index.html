@@ -520,7 +520,7 @@ const translations = {
     iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
     copy: "Tocca per copiare",
     closeButton: 'Chiudi',
-    name: "INTESTATARIO: <br> FEDERICO HARIN ATTYGALA",
+    name: "INTESTATARIO: <br> HARIN FEDERICO ATTYGALA",
     footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
     tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
     shareOnInstagram: "Condividi su Instagram 📸 ",
@@ -739,7 +739,7 @@ function copyIBAN() {
 function copyName() {
     const text = document.getElementById('nameText').innerText;
 
-    navigator.clipboard.writeText((globalLanguage === 'it') ? text.replace('INTESTATARIO: ', '') : text.replace('ACCOUNT HOLDER: ', ''));
+    navigator.clipboard.writeText((globalLanguage === 'it') ? text.replace('INTESTATARIO:\n', '') : text.replace('ACCOUNT HOLDER:\n', ''));
 
     const hint = document.getElementById('copyHintName');
     hint.innerHTML = globalLanguage === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
