@@ -525,7 +525,7 @@ const translations = {
     tagAdvice: `taggaci <strong id="tagEra">@erandikaconthrath</strong> e <strong id="tagFede">@harinfederico</strong>`,
     shareOnInstagram: "Condividi su Instagram 📸 ",
     publishedPhotos: `
-      Tutte le foto pubblicate con<br>
+      Tutte le foto verranno pubblicate con<br>
       <strong>#ErandikaFedericoWedding2026</strong>
     `,
     hashtagGalleryTitle: "Momenti condivisi ❤️",
@@ -570,7 +570,7 @@ const translations = {
     tagAdvice: `tag us <strong id="tagEra">@erandikaconthrath</strong> & <strong id="tagFede">@harinfederico</strong>`,
     shareOnInstagram: "Share on Instagram 📸",
     publishedPhotos: `
-      All the photos shared with<br>
+      All the photos will be shared with<br>
       <strong>#ErandikaFedericoWedding2026</strong>
     `,
     hashtagGalleryTitle: "Shared moments ❤️",
@@ -649,10 +649,14 @@ function applyLanguage(lang) {
     video.playbackRate = 4.0;
   }
   const wrapper = document.querySelector('.video-wrapper');
-  document.body.classList.add('lock-scroll');
-  wrapper.classList.add('fullscreen');
   video.onended = null;
   video.ontimeupdate = null;
+  
+  if (!(dayHasCome() || isTestEnv())) {
+    document.body.classList.add('lock-scroll');
+    wrapper.classList.add('fullscreen');
+  }
+  
 
   video.ontimeupdate = () => {
     if (video.duration && video.currentTime >= video.duration - offset) {
@@ -854,7 +858,7 @@ function animationHandlerByID(elementID) {
 }
 
 function vibrateOnReveal() {
-  if ("vibrate" in navigator) {
+  if (/iPhone|iPad|iPod|Android/.test(navigator.userAgent) && "vibrate" in navigator) {
     navigator.vibrate([200, 100, 200]);
   }
 }
