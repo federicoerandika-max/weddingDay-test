@@ -117,6 +117,12 @@
   outline-offset: 4px;
 }
 
+@media (max-width: 768px) {
+  .nav-link {
+    margin-bottom: 25px;
+  }
+}
+
 /* DESKTOP layout */
 @media (min-width: 768px) {
   .nav-toggle {
@@ -137,6 +143,7 @@
     background: transparent;
     box-shadow: none;
     width: auto;
+    align-items: baseline;
   }
 
   .nav-link {

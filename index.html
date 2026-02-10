@@ -374,7 +374,8 @@
         <nav class="nav-links" id="navLinks">
           <a href="index.html" class="nav-link">Home</a>
           <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline</a>
-          <a href="pages/gift.html" class="nav-link" id="navGift" style="margin-bottom: 25px;"></a>
+          <a href="pages/gift.html" class="nav-link" id="navGift"></a>
+          <a href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1" class="nav-link last" id="navWedshoots"></a>
           <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
         </nav>
       </header>
@@ -562,7 +563,8 @@ const translations = {
     formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
     timeline: 'Segui la Timeline dell\'evento 🕒',
     navGift: 'Un pensiero per noi 🎁',
-    navFAQ: 'Domande frequenti'
+    navFAQ: 'Domande frequenti',
+    navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
   },
   en: {
     title: "We’re getting married 💍",
@@ -610,7 +612,8 @@ const translations = {
     formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
     timeline: 'Follow the timeline of the event 🕒',
     navGift: 'A little thought for us 🎁',
-    navFAQ: 'Frequently asked questions'
+    navFAQ: 'Frequently asked questions',
+    navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
   },
   
 };
@@ -664,11 +667,11 @@ function applyLanguage(lang) {
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
   document.getElementById('timeline').innerHTML = t.timeline;
-  //document.getElementById('navFAQ').innerHTML = t.navFAQ;
+  document.getElementById('navWedshoots').innerHTML = t.navWedshoots;
   if (document.getElementById('navGift')) {
     document.getElementById('navGift').innerHTML = t.navGift;
   }
-  
+
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
   }
