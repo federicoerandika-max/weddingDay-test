@@ -374,7 +374,7 @@
         <nav class="nav-links" id="navLinks">
           <a href="index.html" class="nav-link">Home</a>
           <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline</a>
-          <a href="pages/gift.html" class="nav-link" id="navGift"></a>
+          <a href="pages/gift.html" class="nav-link" id="navGift" style="margin-bottom: 25px;"></a>
           <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
         </nav>
       </header>
@@ -979,7 +979,9 @@ const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
 
 navToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
+  const opened = navLinks.classList.toggle("open");
+  navToggle.classList.toggle('active');
+  navToggle.setAttribute('aria-expanded', opened);
 });
 
 document.querySelectorAll(".nav-link").forEach(link => {
