@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="assets/css/future-updates.css">
   <link rel="stylesheet" href="assets/css/photo-share.css">
   <link rel="stylesheet" href="assets/css/gallery.css">
+  <link rel="stylesheet" href="assets/css/navbarstyles.css">
   
   <style>
     [data-aos] {
@@ -361,6 +362,24 @@
 
 <body>
 
+    <header class="navbar hidden" >
+        <div class="nav-container">
+          <a href="index.html" class="nav-logo">Federico & Erandika</a>
+      
+          <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            ☰
+          </button>
+        </div>
+      
+        <nav class="nav-links" id="navLinks">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline</a>
+          <a href="pages/gift.html" class="nav-link" id="navGift" style="margin-bottom: 25px;"></a>
+          <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ" style="margin-bottom: 25px;"></a> -->
+        </nav>
+      </header>
+      
+
 <div class="container">
 
   <!-- LANGUAGE SWITCH -->
@@ -541,7 +560,9 @@ const translations = {
       <small> (il codice è già copiato dovrai solo incollarlo) </small>
     `,
     formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
-    timeline: 'Segui la Timeline dell\'evento 🕒'
+    timeline: 'Segui la Timeline dell\'evento 🕒',
+    navGift: 'Un pensiero per noi 🎁',
+    navFAQ: 'Domande frequenti'
   },
   en: {
     title: "We’re getting married 💍",
@@ -587,7 +608,9 @@ const translations = {
         <small> (the code is already copied, you just need to paste it) </small>
     `,
     formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
-    timeline: 'Follow the timeline of the event 🕒'
+    timeline: 'Follow the timeline of the event 🕒',
+    navGift: 'A little thought for us 🎁',
+    navFAQ: 'Frequently asked questions'
   },
   
 };
@@ -641,6 +664,10 @@ function applyLanguage(lang) {
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
   document.getElementById('timeline').innerHTML = t.timeline;
+  document.getElementById('navFAQ').innerHTML = t.navFAQ;
+  if (document.getElementById('navGift')) {
+    document.getElementById('navGift').innerHTML = t.navGift;
+  }
   
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
@@ -677,6 +704,12 @@ function applyLanguage(lang) {
       /* UNLOCK SCROLL */
       document.body.classList.remove('lock-scroll');
       wrapper.classList.remove('fullscreen');
+
+      /* reveal navbar now that video left fullscreen */
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        navbar.classList.remove('hidden');
+      }
 
       /* TOOLTIP */
       document.querySelectorAll('.tooltip').forEach(t => t.style.display = 'block');
@@ -878,12 +911,14 @@ function activateWeddingFeatures() {
   const now = new Date();
 
   if ((now >= weddingDate) || isTestEnv()) {
+    const navTimeline = document.getElementById("navTimeline");
     const btnTimeline = document.getElementById("btn-timeline");
     const igSection = document.getElementById("instagramShare");
     const gallery = document.getElementById("hashtagGallery");
     igSection.classList.remove("hidden");
     gallery.classList.remove("hidden");
     btnTimeline.classList.remove("hidden");
+    navTimeline.classList.remove("hidden");
     vibrateOnReveal();
     AOS.refresh();
   }
@@ -939,6 +974,19 @@ function dayHasCome() {
   const now = new Date();
   return now >= weddingDate;
 }
+
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+
+navToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("open");
+});
+
+document.querySelectorAll(".nav-link").forEach(link => {
+  if (link.href === window.location.href) {
+    link.style.fontWeight = "600";
+  }
+});
 
 </script>
 <script src="assets/js/photo-share.js"></script>
