@@ -92,6 +92,8 @@
         e_lamp_d: "Un breve rito di benvenuto e buon auspicio.",
         e_aperitif: "Aperitivo",
         e_aperitif_d: "Relax, brindisi e chiacchiere.",
+        e_champagne: "Cascata di champagne",
+        e_champagne_d: "Un brindisi speciale con gli sposi.",
         e_room: "Ingresso in sala",
         e_room_d: "Invito a prendere posto; breve ingresso degli sposi.",
         e_dinner: "Cena",
@@ -100,7 +102,7 @@
         e_speeches_d: "Un momento dedicato durante la cena.",
         e_cake: "Taglio torta",
         e_cake_d: "Foto e torta!",
-        e_sweets: "Dolci & caffè",
+        e_sweets: "Buffet dolci",
         e_sweets_d: "Transizione verso la festa.",
         e_party: "Festa & open bar",
         e_party_d: "Pista aperta!"
@@ -122,6 +124,8 @@
         e_lamp_d: "A short welcome and blessing moment.",
         e_aperitif: "Aperitif",
         e_aperitif_d: "Relax, cheers, and chats.",
+        e_champagne: "Champagne cascade",
+        e_champagne_d: "A special toast with the newlyweds.",
         e_room: "Guests seated + couple entrance",
         e_room_d: "Please take your seats; short couple entrance.",
         e_dinner: "Dinner",
@@ -130,7 +134,7 @@
         e_speeches_d: "A dedicated moment during dinner.",
         e_cake: "Cake cutting",
         e_cake_d: "Photos and cake!",
-        e_sweets: "Desserts & coffee",
+        e_sweets: "Dessert buffet",
         e_sweets_d: "Transition into the party.",
         e_party: "Party & open bar",
         e_party_d: "Dance floor is open!"
@@ -156,16 +160,17 @@
 
     // Orari “puliti” dal CSV: solo ciò che serve agli invitati. [file:31]
     const scheduleBase = [
-      { start: "15:25", end: "15:40", key: "takeSeat" },
-      { start: "16:22", end: "16:57", key: "ceremony" },
-      { start: "17:02", end: "17:12", key: "lamp" },
-      { start: "17:30", end: "18:30", key: "aperitif" },
-      { start: "18:30", end: "18:45", key: "room" },
-      { start: "18:45", end: "21:00", key: "dinner" },
-      { start: "19:15", end: "19:35", key: "speeches" },
-      { start: "21:10", end: "21:25", key: "cake" },
-      { start: "21:25", end: "22:00", key: "sweets" },
-      { start: "22:00", end: "01:00", key: "party" }
+      { start: "15:25", end: "15:30", key: "takeSeat" }, // confermato
+      { start: "16:20", end: "17:00", key: "ceremony" }, // confermato
+      { start: "17:00", end: "17:15", key: "lamp" }, // confermato
+      { start: "17:15", end: "18:30", key: "aperitif" }, // confermato
+      { start: "18:30", end: "19:00", key: "champagne" },
+      { start: "19:00", end: "19:15", key: "room" }, 
+      { start: "19:15", end: "21:30", key: "dinner" },
+      { start: "20:00", end: "20:35", key: "speeches" },
+      { start: "22:00", end: "22:30", key: "cake" },
+      { start: "22:00", end: "23:00", key: "sweets" },
+      { start: "22:30", end: "01:00", key: "party" }
     ];
 
     function toMin(hhmm) {
@@ -182,6 +187,7 @@
         ceremony: { title: t.e_ceremony, desc: t.e_ceremony_d },
         lamp: { title: t.e_lamp, desc: t.e_lamp_d },
         aperitif: { title: t.e_aperitif, desc: t.e_aperitif_d },
+        champagne: { title: t.e_champagne, desc: t.e_champagne_d },
         room: { title: t.e_room, desc: t.e_room_d },
         dinner: { title: t.e_dinner, desc: t.e_dinner_d },
         speeches: { title: t.e_speeches, desc: t.e_speeches_d },
