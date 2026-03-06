@@ -930,7 +930,7 @@ function updateCountdown() {
   `;
 
   activateWeddingFeatures();
-  deactivateSections();
+  deactivateSections("countdownSection");
 }
 
 countDownForm();
@@ -995,6 +995,10 @@ function dragDownGiftHandler() {
 function animationHandlerByID(elementID) {
   const element = document.getElementById(elementID);
 
+  if (elementID === 'footer' && document.getElementById('footerText') && !document.getElementById('footerText').innerHTML) {
+      document.getElementById('footerText').innerHTML = translations[globalLanguage].footer;
+  }
+
   const observer = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) {
@@ -1034,11 +1038,11 @@ function activateWeddingFeatures() {
   }
 }
 
-function deactivateSections() {
+function deactivateSections(section) {
   const now = new Date();
 
   if ((now >= weddingDate) || isTestEnv()) {
-    const countdownSection = document.getElementById("countdownSection");
+    const countdownSection = document.getElementById(section);
     countdownSection.classList.add("hidden");
   }
 }
