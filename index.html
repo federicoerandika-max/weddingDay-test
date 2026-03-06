@@ -358,6 +358,10 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -411,9 +415,20 @@
   </div>
 
   <!-- COUNTDOWN -->
-  <h2 id="countdownTitle" data-aos="fade-up"></h2>
-  <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
+  <section id="countdownSection">
+    <h2 id="countdownTitle" data-aos="fade-up"></h2>
+    <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
+  </section>
 
+  <!-- TEXT -->
+  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+
+  <br><br>
+  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
+    <span id="signatureText"></span>
+  </div>
+
+  
   <!-- TABLE FINDER (visibile solo il giorno del matrimonio) -->
   <section id="tableFinder" class="table-finder hidden" data-aos="fade-up">
     <h2 id="tfTitle"></h2>
@@ -441,14 +456,6 @@
     <!-- Non trovato -->
     <p class="tf-not-found" id="tfNotFound"></p>
   </section>
-
-  <!-- TEXT -->
-  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
-
-  <br><br>
-  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
-    <span id="signatureText"></span>
-  </div>
 
   <!-- FORM -->
   <h2 id="formTitle" data-aos="fade-up"></h2>
@@ -922,6 +929,7 @@ function updateCountdown() {
   `;
 
   activateWeddingFeatures();
+  deactivateSections();
 }
 
 countDownForm();
@@ -1022,6 +1030,15 @@ function activateWeddingFeatures() {
     navTimeline.classList.remove("hidden");
     vibrateOnReveal();
     AOS.refresh();
+  }
+}
+
+function deactivateSections() {
+  const now = new Date();
+
+  if ((now >= weddingDate) || isTestEnv()) {
+    const countdownSection = document.getElementById("countdownSection");
+    countdownSection.classList.add("hidden");
   }
 }
 
@@ -1288,7 +1305,9 @@ function resetTableFinder() {
 }
 
 function initTableFinder() {
-  if (!(dayHasCome() || isTestEnv())) return;
+  if (!(dayHasCome() || isTestEnv())){ 
+    return; // non inizializza se il giorno non è ancora arrivato
+  };
 
   const section = document.getElementById('tableFinder');
   section.classList.remove('hidden');
