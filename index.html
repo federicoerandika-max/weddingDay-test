@@ -681,14 +681,54 @@ function applyLanguage(lang) {
 
   videoSource.src = videoPath + (lang === 'en' ? 'video-en.mp4' : 'video-it.mp4');
 
-  let offset = 1; // secondi prima della fine
   const video = document.getElementById('weddingVideo');
+  const wrapper = document.querySelector('.video-wrapper');
+
+  // ── Controlla se l'utente ha già visitato il sito ──
+  const hasVisited = localStorage.getItem('hasVisitedBefore');
+
+  if (hasVisited) {
+    // ── RETURNING VISITOR: salta il video fullscreen ──
+    video.onended = null;
+    video.ontimeupdate = null;
+    document.body.classList.remove('lock-scroll');
+    wrapper.classList.remove('fullscreen');
+
+    // Mostra navbar subito
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      navbar.classList.remove('hidden');
+    }
+
+    // Mostra tooltip subito
+    document.querySelectorAll('.tooltip').forEach(tip => tip.style.display = 'block');
+
+    // Imposta footer
+    if (document.getElementById('footerText') && !document.getElementById('footerText').innerHTML) {
+      document.getElementById('footerText').innerHTML = t.footer;
+    }
+
+    // Video fermo al primo frame (non fullscreen)
+    video.muted = true;
+    video.loop = false;
+    video.autoplay = false;
+    video.load();
+    video.addEventListener('loadeddata', function onLoaded() {
+      video.currentTime = 0;
+      video.pause();
+      video.removeEventListener('loadeddata', onLoaded);
+    }, { once: true });
+
+    return; // esce senza attivare il flusso fullscreen
+  }
+
+  // ── FIRST-TIME VISITOR: video fullscreen completo ──
+  let offset = 1; // secondi prima della fine
   video.load();
   video.play();
   if (isTestEnv()) {
     video.playbackRate = 4.0;
   }
-  const wrapper = document.querySelector('.video-wrapper');
   video.onended = null;
   video.ontimeupdate = null;
   
@@ -720,6 +760,9 @@ function applyLanguage(lang) {
       if (document.getElementById('footerText') && !document.getElementById('footerText').innerHTML) {
         document.getElementById('footerText').innerHTML = t.footer;
       }
+
+      // ── Salva in localStorage che l'utente ha visitato il sito ──
+      localStorage.setItem('hasVisitedBefore', 'true');
     }
   };
 }
@@ -990,6 +1033,24 @@ navToggle.addEventListener("click", () => {
 document.querySelectorAll(".nav-link").forEach(link => {
   if (link.href === window.location.href) {
     link.style.fontWeight = "600";
+  }
+});
+
+/* ================== RESET VIDEO FULLSCREEN ================== */
+// Click su nav-logo o link "Home" → resetta localStorage e ricarica per rivedere il video fullscreen
+document.querySelector('.nav-logo').addEventListener('click', function(e) {
+  e.preventDefault();
+  localStorage.removeItem('hasVisitedBefore');
+  window.location.href = this.href;
+});
+
+document.querySelectorAll('.nav-link').forEach(link => {
+  if (link.href.includes('index.html') && !link.classList.contains('nav-logo')) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('hasVisitedBefore');
+      window.location.href = this.href;
+    });
   }
 });
 
