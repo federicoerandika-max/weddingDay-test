@@ -20,7 +20,46 @@
     .container { max-width: 900px; margin:auto; padding: 20px; }
     .lang-switch { margin-bottom: 15px; }
     .lang-switch button { border:none; background:white; padding:8px 14px; margin:0 5px; border-radius:20px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-    a.back { display:inline-block; margin: 12px 0 20px; text-decoration:none; color:#333; opacity:.85; }
+    a.back { display:none; } /* legacy — replaced by breadcrumb */
+
+    /* Breadcrumb navigation */
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 14px 0 22px;
+      padding: 10px 20px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+      color: #888;
+      padding: 4px 2px;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: #333;
+    }
+
+    .breadcrumb .sep {
+      margin: 0 10px;
+      color: #ccc;
+      font-size: 0.75rem;
+      user-select: none;
+    }
+
+    .breadcrumb .current {
+      color: #333;
+      font-weight: 500;
+    }
 
     .card { background: white; border-radius: 18px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); margin: 14px 0; text-align:left; }
     .card h2 { margin: 0 0 10px; text-align:center; }
@@ -37,6 +76,37 @@
 
     .site-footer { margin-top: 60px; padding: 30px 20px; background:#f3eee9; color:#666; font-size: .9rem; border-top: 1px solid rgba(0,0,0,0.05); }
     .site-footer strong { font-family:"Playfair Display", serif; font-weight:600; color:#333; }
+
+    .hidden { display: none !important; }
+
+    .poruwa-cta {
+      margin: 20px auto;
+      max-width: 700px;
+      animation: fadeIn .6s ease;
+    }
+
+    .poruwa-cta a {
+      display: block;
+      background: white;
+      padding: 18px 24px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .poruwa-cta a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 
@@ -49,7 +119,11 @@
       <button onclick="setLanguage('en')">🇬🇧 English</button>
     </div>
 
-    <a class="back" href="../index.html" id="backHome"></a>
+    <nav class="breadcrumb">
+      <a href="../index.html" id="backHome"></a>
+      <span class="sep">›</span>
+      <span class="current" id="breadcrumbCurrent"></span>
+    </nav>
 
     <h1 id="programTitle"></h1>
     <p id="programIntro" class="muted" style="line-height:1.6; max-width:700px; margin: 10px auto 24px;"></p>
@@ -65,6 +139,11 @@
       <div id="timeline" class="timeline"></div>
     </div>
 
+    <!-- Bottone Poruwa: visibile solo durante la cerimonia -->
+    <div id="poruwaCta" class="poruwa-cta hidden">
+      <a href="poruwa.html" id="poruwaCtaText"></a>
+    </div>
+
   </div>
 
   <footer class="site-footer">
@@ -77,7 +156,8 @@
       it: {
         programTitle: "Programma della giornata",
         programIntro: "Qui trovi una timeline semplice per sapere sempre cosa sta succedendo (orari indicativi).",
-        backHome: "← Home",
+        backHome: "Home",
+        breadcrumbCurrent: "Timeline",
         nowLabel: "Adesso",
         nextPrefix: "Prossimo:",
         timelineTitle: "Timeline",
@@ -88,6 +168,7 @@
         e_takeSeat_d: "Ci accomodiamo: la cerimonia sta per iniziare.",
         e_ceremony: "Cerimonia",
         e_ceremony_d: "Inizio cerimonia; al termine breve momento foto.",
+        poruwaCta: 'Vuoi capire cosa sta accadendo? Scopri il significato della cerimonia del Poruwa <img src="../assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
         e_lamp: "Momento simbolico (lampada)",
         e_lamp_d: "Un breve rito di benvenuto e buon auspicio.",
         e_aperitif: "Aperitivo",
@@ -110,7 +191,8 @@
       en: {
         programTitle: "Day schedule",
         programIntro: "A simple timeline to always know what’s happening (approx. times).",
-        backHome: "← Home",
+        backHome: "Home",
+        breadcrumbCurrent: "Timeline",
         nowLabel: "Now",
         nextPrefix: "Next:",
         timelineTitle: "Timeline",
@@ -120,6 +202,7 @@
         e_takeSeat_d: "Please get seated: the ceremony is about to begin.",
         e_ceremony: "Ceremony",
         e_ceremony_d: "Ceremony begins; a short photo moment follows.",
+        poruwaCta: 'Curious about what\'s happening? Discover the meaning of the Poruwa ceremony <img src="../assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
         e_lamp: "Symbolic moment (oil lamp)",
         e_lamp_d: "A short welcome and blessing moment.",
         e_aperitif: "Aperitif",
@@ -210,10 +293,12 @@
       const t = translations[lang];
       document.getElementById('programTitle').innerHTML = t.programTitle;
       document.getElementById('programIntro').innerHTML = t.programIntro;
-      document.getElementById('backHome').innerHTML = t.backHome;
+      document.getElementById('backHome').textContent = t.backHome;
+      document.getElementById('breadcrumbCurrent').textContent = t.breadcrumbCurrent;
       document.getElementById('nowLabel').innerHTML = t.nowLabel;
       document.getElementById('timelineTitle').innerHTML = t.timelineTitle;
       document.getElementById('footerText').innerHTML = t.footer;
+      document.getElementById('poruwaCtaText').innerHTML = t.poruwaCta;
     }
 
     function renderTimeline() {
@@ -257,6 +342,14 @@
         const idx = schedule.findIndex(x => x.key === current.key && x.start === current.start);
         const row = document.querySelector(`.tl-row[data-i="${idx}"]`);
         if (row) row.classList.add("is-now");
+      }
+
+      // Mostra il bottone Poruwa solo durante la cerimonia
+      const poruwaCta = document.getElementById('poruwaCta');
+      if (current && (current.key === 'ceremony' || current.key === 'lamp')) {
+        poruwaCta.classList.remove('hidden');
+      } else {
+        poruwaCta.classList.add('hidden');
       }
     }
 

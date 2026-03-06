@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Day — Cerimonia del Poruwa</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../assets/img/wedding-logo.png">
+  <link rel="apple-touch-icon" href="../assets/img/wedding-logo.png">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #faf7f4;
+      color: #333;
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .lang-switch {
+      margin-bottom: 15px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: white;
+      padding: 8px 14px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Breadcrumb navigation */
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 14px 0 22px;
+      padding: 10px 20px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+      color: #888;
+      padding: 4px 2px;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: #333;
+    }
+
+    .breadcrumb .sep {
+      margin: 0 10px;
+      color: #ccc;
+      font-size: 0.75rem;
+      user-select: none;
+    }
+
+    .breadcrumb .current {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .hero-img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      margin: 20px auto;
+      display: block;
+    }
+
+    .intro-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: .85;
+      max-width: 650px;
+      margin: 10px auto 30px;
+    }
+
+    /* Steps */
+    .ceremony-steps {
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      position: relative;
+      padding-left: 60px;
+    }
+
+    .step-number {
+      position: absolute;
+      left: 18px;
+      top: 20px;
+      width: 30px;
+      height: 30px;
+      background: #f3eee9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      line-height: 1.65;
+      opacity: .85;
+      font-size: 0.93rem;
+    }
+
+    .site-footer {
+      margin-top: 60px;
+      padding: 30px 20px;
+      background: #f3eee9;
+      color: #666;
+      font-size: .9rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .site-footer strong {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: #333;
+    }
+
+    @media (max-width: 600px) {
+      .step {
+        padding-left: 52px;
+        padding-right: 16px;
+      }
+
+      .step-number {
+        left: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="lang-switch">
+      <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+      <button onclick="setLanguage('en')">🇬🇧 English</button>
+    </div>
+
+    <nav class="breadcrumb" id="breadcrumb">
+      <a href="../index.html" id="backHome"></a>
+      <span class="sep" id="sepTimeline" style="display:none;">›</span>
+      <a href="timeline.html" id="backTimeline" style="display:none;"></a>
+      <span class="sep">›</span>
+      <span class="current" id="breadcrumbCurrent"></span>
+    </nav>
+
+    <h1 id="pageTitle"></h1>
+
+    <img class="hero-img" src="../assets/img/poruwa-ceremony-natural.png" alt="Poruwa Ceremony">
+
+    <p class="intro-text" id="pageIntro"></p>
+
+    <div class="ceremony-steps" id="stepsContainer"></div>
+
+  </div>
+
+  <footer class="site-footer">
+    <p id="footerText"></p>
+  </footer>
+
+  <script>
+    const translations = {
+      it: {
+        pageTitle: 'La cerimonia del Poruwa <img src="../assets/img/white-jasmine-flower.png" class="tf-table-icon" width="50" height="50" style="place-self: anchor-center;">',
+        backHome: "Home",
+        backTimeline: "Timeline",
+        breadcrumbCurrent: "Poruwa",
+        pageIntro: "Il Poruwa è la cerimonia nuziale tradizionale singalese. Si svolge su un palco decorato (il <em>poruwa</em>) ed è un susseguirsi di gesti simbolici ricchi di significato. Ecco cosa accadrà, passo dopo passo.",
+        footer: "© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>",
+        steps: [
+          {
+            title: "Arrivo dello sposo",
+            desc: "Dapprima arriva il promesso sposo, accolto da danze e musiche, e riceve il benvenuto dei presenti."
+          },
+          {
+            title: "Arrivo della sposa",
+            desc: "Poi, la promessa sposa accompagnata da musiche e danze, raggiunge lo sposo."
+          },
+          {
+            title: "Le preghiere",
+            desc: "Iniziano le preghiere per invocare la protezione dei tre santi gemelli: il <strong>Buddha</strong> (l'illuminato), il <strong>Dharma</strong> (il suo insegnamento), il <strong>Sangha</strong> (la comunità dei fedeli), ed affidarsi a loro."
+          },
+          {
+            title: "Il trono nuziale e l'offerta di betel",
+            desc: "Il celebrante fa accomodare la promessa sposa e il promesso sposo sul trono nuziale, e offre un fascio di betel agli dei. La pianta di betel è un sempreverde perenne, con foglie lucide a forma di cuore e amento bianco, dono tipico nel matrimonio singalese."
+          },
+          {
+            title: "Le sette manciate di betel",
+            desc: "Sparge poi sette manciate di betel in dono alle ultime sette generazioni delle famiglie degli sposi, implorando in loro favore benevolenza e benedizione."
+          },
+          {
+            title: "Scambio degli anelli e doni",
+            desc: "Il promesso sposo e la sposa si scambiano gli anelli nuziali, e il promesso sposo pone intorno al collo della promessa sposa una collana e un vestito."
+          },
+          {
+            title: "Il legame sacro",
+            desc: "Si stringe il legame fra i due promessi sposi: il celebrante unisce tra loro i due mignoli della coppia legandoli con un nastro benedetto, e lo bagna con acqua benedetta, mentre un gruppo di fanciulle e giovani donne canta la <em>Jayamangala Gatha</em>, canto tradizionale, invocando benedizioni, fortuna e buona sorte."
+          },
+          {
+            title: "Il kiribat e i doni ai genitori",
+            desc: "La madre della sposa offre alla coppia una ciotola di <strong>kiribat</strong>, riso al latte di cocco, come augurio di prosperità, e la coppia le dona una veste di lana bianca (<em>kiri kada helaya</em>) in segno di rispetto e gratitudine. Inoltre la coppia offrirà dei doni anche agli altri genitori."
+          },
+          {
+            title: "Betel ai cari",
+            desc: "La coppia offre fasci di betel ai rispettivi genitori, parenti e amici."
+          },
+          {
+            title: "Discesa dal trono e la noce di cocco",
+            desc: "Insieme, i genitori degli sposi li fanno scendere dal trono nuziale prendendoli per mano, mentre un familiare della sposa apre una noce di cocco fresca quale auspicio di prosperità e per tener lontani tutti gli influssi negativi."
+          },
+          {
+            title: "La lampada ad olio",
+            desc: "Ora la coppia appena sposata accende — insieme con i rispettivi genitori, familiari, damigelle, testimoni — una lampada ad olio votiva, a conclusione della cerimonia."
+          },
+          {
+            title: "Il cammino insieme",
+            desc: "Gli sposi tornano verso il poruwa, ci salgono, scendono e percorrono la navata."
+          }
+        ]
+      },
+      en: {
+        pageTitle: 'The Poruwa Ceremony <img src="../assets/img/white-jasmine-flower.png" class="tf-table-icon" width="50" height="50" style="place-self: anchor-center;">',
+        backHome: "Home",
+        backTimeline: "Timeline",
+        breadcrumbCurrent: "Poruwa",
+        pageIntro: "The Poruwa is the traditional Sinhalese wedding ceremony. It takes place on a decorated platform (the <em>poruwa</em>) and consists of a series of symbolic gestures full of meaning. Here's what will happen, step by step.",
+        footer: "© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>",
+        steps: [
+          {
+            title: "Arrival of the groom",
+            desc: "First, the groom arrives, welcomed by dances and music, and receives the greetings of the guests."
+          },
+          {
+            title: "Arrival of the bride",
+            desc: "Then, the bride, accompanied by music and dances, joins the groom."
+          },
+          {
+            title: "The prayers",
+            desc: "Prayers begin to invoke the protection of the Triple Gem: the <strong>Buddha</strong> (the enlightened one), the <strong>Dharma</strong> (his teachings), the <strong>Sangha</strong> (the community of the faithful), and to entrust themselves to them."
+          },
+          {
+            title: "The wedding throne and betel offering",
+            desc: "The officiant seats the bride and groom on the wedding throne and offers a bundle of betel to the gods. The betel plant is an evergreen perennial, with glossy heart-shaped leaves and a white catkin — a traditional gift in Sinhalese weddings."
+          },
+          {
+            title: "The seven handfuls of betel",
+            desc: "He then scatters seven handfuls of betel as offerings to the last seven generations of the couple's families, imploring benevolence and blessings on their behalf."
+          },
+          {
+            title: "Exchange of rings and gifts",
+            desc: "The groom and the bride exchange wedding rings, and the groom places a necklace and a garment around the bride's neck."
+          },
+          {
+            title: "The sacred bond",
+            desc: "The bond between the couple is sealed: the officiant joins their little fingers together, binding them with a blessed ribbon, and sprinkles them with holy water, while a group of young women sing the <em>Jayamangala Gatha</em>, a traditional chant invoking blessings, fortune and good luck."
+          },
+          {
+            title: "The kiribat and gifts to parents",
+            desc: "The bride's mother offers the couple a bowl of <strong>kiribat</strong>, coconut milk rice, as a wish for prosperity, and the couple gives her a white wool garment (<em>kiri kada helaya</em>) as a sign of respect and gratitude. The couple also offers gifts to the other parents."
+          },
+          {
+            title: "Betel to loved ones",
+            desc: "The couple offers bundles of betel to their respective parents, relatives and friends."
+          },
+          {
+            title: "Descent from the throne and the coconut",
+            desc: "Together, the parents of the bride and groom help them down from the wedding throne by taking their hands, while a relative of the bride cracks open a fresh coconut as an omen of prosperity and to ward off all negative influences."
+          },
+          {
+            title: "The oil lamp",
+            desc: "The newlywed couple lights — together with their respective parents, family members, bridesmaids, and witnesses — a votive oil lamp, concluding the ceremony."
+          },
+          {
+            title: "Walking together",
+            desc: "The newlyweds return to the poruwa, step up, step down, and walk down the aisle."
+          }
+        ]
+      }
+    };
+
+    let globalLanguage;
+
+    function detectLanguage() {
+      const saved = localStorage.getItem('lang');
+      if (saved) return saved;
+      const browserLang = navigator.language || navigator.userLanguage;
+      return browserLang && browserLang.startsWith('en') ? 'en' : 'it';
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      applyLanguage(lang);
+    }
+
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      globalLanguage = lang;
+
+      const t = translations[lang];
+      document.getElementById('pageTitle').innerHTML = t.pageTitle;
+      document.getElementById('backHome').textContent = t.backHome;
+      document.getElementById('breadcrumbCurrent').textContent = t.breadcrumbCurrent;
+      document.getElementById('pageIntro').innerHTML = t.pageIntro;
+      document.getElementById('footerText').innerHTML = t.footer;
+
+      // Mostra crumb "Timeline" solo se l'utente arriva dalla timeline
+      const fromTimeline = document.referrer && document.referrer.includes('timeline');
+      document.getElementById('backTimeline').textContent = t.backTimeline;
+      document.getElementById('backTimeline').style.display = fromTimeline ? 'inline' : 'none';
+      document.getElementById('sepTimeline').style.display = fromTimeline ? 'inline' : 'none';
+
+      // Render steps
+      const container = document.getElementById('stepsContainer');
+      container.innerHTML = t.steps.map((step, i) => `
+        <div class="step">
+          <div class="step-number">${i + 1}</div>
+          <div class="step-title">${step.title}</div>
+          <div class="step-desc">${step.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    // INIT
+    applyLanguage(detectLanguage());
+  </script>
+</body>
+</html>

@@ -379,6 +379,7 @@
         <nav class="nav-links" id="navLinks">
           <a href="index.html" class="nav-link">Home</a>
           <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline 🕒</a>
+          <a href="pages/poruwa.html" class="nav-link hidden" id="navPoruwa"></a>
           <a href="pages/gift.html" class="nav-link" id="navGift"></a>
           <a href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1" class="nav-link last" id="navWedshoots"></a>
           <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
@@ -599,6 +600,7 @@ const translations = {
     formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
     timeline: 'Segui la Timeline dell\'evento 🕒',
     navGift: 'Un pensiero per noi 🎁',
+    navPoruwa: 'La cerimonia del Poruwa <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
     navFAQ: 'Domande frequenti',
     navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
     tfTitle: 'Trova il tuo tavolo <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
@@ -655,6 +657,7 @@ const translations = {
     formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
     timeline: 'Follow the timeline of the event 🕒',
     navGift: 'A little thought for us 🎁',
+    navPoruwa: 'The Poruwa Ceremony <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
     navFAQ: 'Frequently asked questions',
     navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
     tfTitle: 'Find your table <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="50" height="50" style="place-self: anchor-center;">',
@@ -720,6 +723,9 @@ function applyLanguage(lang) {
   document.getElementById('navWedshoots').innerHTML = t.navWedshoots;
   if (document.getElementById('navGift')) {
     document.getElementById('navGift').innerHTML = t.navGift;
+  }
+  if (document.getElementById('navPoruwa')) {
+    document.getElementById('navPoruwa').innerHTML = t.navPoruwa;
   }
 
   if (document.getElementById('footerText')) {
@@ -1029,10 +1035,12 @@ function activateWeddingFeatures() {
     const btnTimeline = document.getElementById("btn-timeline");
     const igSection = document.getElementById("instagramShare");
     const gallery = document.getElementById("hashtagGallery");
+    const navPoruwa = document.getElementById("navPoruwa");
     igSection.classList.remove("hidden");
     gallery.classList.remove("hidden");
     btnTimeline.classList.remove("hidden");
     navTimeline.classList.remove("hidden");
+    if (navPoruwa) navPoruwa.classList.remove("hidden");
     vibrateOnReveal();
     AOS.refresh();
   }

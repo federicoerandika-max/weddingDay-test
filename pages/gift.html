@@ -17,11 +17,54 @@
             background: #faf7f4;
             color: #333;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
             text-align: center;
+        }
+
+        /* Breadcrumb navigation */
+        .breadcrumb {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            margin: 0 0 18px;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            font-size: 0.88rem;
+            letter-spacing: 0.02em;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #888;
+            padding: 4px 2px;
+            transition: color 0.2s;
+            display: inline-block;
+            margin: 0;
+            box-shadow: none;
+            background: none;
+            border-radius: 0;
+        }
+
+        .breadcrumb a:hover {
+            color: #333;
+        }
+
+        .breadcrumb .sep {
+            margin: 0 10px;
+            color: #ccc;
+            font-size: 0.75rem;
+            user-select: none;
+        }
+
+        .breadcrumb .current {
+            color: #333;
+            font-weight: 500;
         }
 
         .card {
@@ -109,6 +152,12 @@
 
 <body>
 
+    <nav class="breadcrumb">
+        <a href="../index.html" id="backHome"></a>
+        <span class="sep">›</span>
+        <span class="current" id="breadcrumbCurrent"></span>
+    </nav>
+
     <div class="card">
         <h1 id="title"></h1>
         <p id="text"></p>
@@ -121,9 +170,6 @@
             <span id="ibanText"></span><br>
             <small id="copyHintIBAN"></small>
         </div>
-
-
-        <a href="../index.html" id="back"></a>
     </div>
 
     <script>
@@ -135,7 +181,8 @@
                 title: "Un pensiero per noi 🎁",
                 text: "Il regalo più grande per noi sarà avervi accanto in questo giorno speciale.<br><br>Per chi lo desidera, qui trovate le coordinate per un pensiero libero e spontaneo ❤️",
                 iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
-                back: "Home",
+                backHome: "Home",
+                breadcrumbCurrent: "Regalo",
                 copy: "Tocca per copiare",
                 giftTitle: "Un pensiero per noi 🎁",
                 name: "INTESTATARIO: FEDERICO HARIN ATTYGALA"
@@ -144,7 +191,8 @@
                 title: "A little thought for us 🎁",
                 text: "Having you with us is the greatest gift.<br><br>For those who wish, here are the details for a small, heartfelt thought ❤️",
                 iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
-                back: "Home",
+                backHome: "Home",
+                breadcrumbCurrent: "Gift",
                 copy: "Click to copy",
                 giftTitle: "A little thought for us 🎁",
                 name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA"
@@ -153,7 +201,8 @@
 
         document.getElementById('title').innerHTML = t[lang].title;
         document.getElementById('text').innerHTML = t[lang].text;
-        document.getElementById('back').innerHTML = t[lang].back;
+        document.getElementById('backHome').textContent = t[lang].backHome;
+        document.getElementById('breadcrumbCurrent').textContent = t[lang].breadcrumbCurrent;
         document.getElementById('ibanText').innerText = t[lang].iban;
         document.getElementById('copyHintIBAN').innerHTML = t[lang].copy;
         document.getElementById('nameText').innerHTML = t[lang].name;
