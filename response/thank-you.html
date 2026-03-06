@@ -79,7 +79,13 @@
   </div>
 
 <script>
-const lang = (navigator.language || '').startsWith('en') ? 'en' : 'it';
+const lang = (() => {
+  const saved = localStorage.getItem('lang');
+  if (saved) return saved;
+  const bl = (navigator.language || '');
+  if (bl.startsWith('si')) return 'si';
+  return bl.startsWith('en') ? 'en' : 'it';
+})();
 
 const t = {
   it: {
@@ -93,6 +99,12 @@ const t = {
     text: "We've received your confirmation. We can't wait to celebrate together!",
     backHome: "Home",
     breadcrumbCurrent: "Confirmation"
+  },
+  si: {
+    title: "හෘදයාංගමව ස්තූතියි ❤️",
+    text: "අපට ඔබේ තහවුරුව ලැබී ඇත. එකට සැමරීමට අපි බලා සිටිනවා!",
+    backHome: "මුල් පිටුව",
+    breadcrumbCurrent: "තහවුරුව"
   }
 };
 

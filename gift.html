@@ -196,6 +196,16 @@
                 copy: "Click to copy",
                 giftTitle: "A little thought for us 🎁",
                 name: "ACCOUNT HOLDER: HARIN FEDERICO ATTYGALA"
+            },
+            si: {
+                title: "අපට කුඩා සිතුවිල්ලක් 🎁",
+                text: "ඔබ අප සමඟ සිටීම ලොකුම තෑග්ගයි.<br><br>කැමති අයට, මෙහි කුඩා, හෘදයාංගම සිතුවිල්ලක් සඳහා විස්තර ඇත ❤️",
+                iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+                backHome: "මුල් පිටුව",
+                breadcrumbCurrent: "තෑග්ග",
+                copy: "පිටපත් කිරීමට ඔබන්න",
+                giftTitle: "අපට කුඩා සිතුවිල්ලක් 🎁",
+                name: "ගිණුම් හිමියා: HARIN FEDERICO ATTYGALA"
             }
         };
 
@@ -217,12 +227,10 @@
             navigator.clipboard.writeText(text.replace(' ', '').replace('IBAN:', ''));
 
             const hint = document.getElementById('copyHintIBAN');
-            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : lang === 'si' ? 'පිටපත් විය ✔️' : 'Copied to clipboard ✔️';
 
             setTimeout(() => {
-                hint.innerHTML = lang === 'it'
-                    ? 'Tocca per copiare'
-                    : 'Tap to copy';
+                hint.innerHTML = t[lang].copy;
             }, 2000);
         }
 
@@ -230,15 +238,13 @@
         function copyName() {
             const text = document.getElementById('nameText').innerText;
 
-            navigator.clipboard.writeText((lang === 'it') ? text.replace('INTESTATARIO: ', '') : text.replace('ACCOUNT HOLDER: ', ''));
+            navigator.clipboard.writeText(text.replace(/^(INTESTATARIO:|ACCOUNT HOLDER:|ගිණුම් හිමියා:)\s*/i, ''));
 
             const hint = document.getElementById('copyHintName');
-            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : 'Copied to clipboard ✔️';
+            hint.innerHTML = lang === 'it' ? 'Copiato negli appunti ✔️' : lang === 'si' ? 'පිටපත් විය ✔️' : 'Copied to clipboard ✔️';
 
             setTimeout(() => {
-                hint.innerHTML = lang === 'it'
-                    ? 'Tocca per copiare'
-                    : 'Tap to copy';
+                hint.innerHTML = t[lang].copy;
             }, 2000);
         }
 

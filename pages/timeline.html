@@ -117,6 +117,7 @@
     <div class="lang-switch">
       <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
       <button onclick="setLanguage('en')">🇬🇧 English</button>
+      <button onclick="setLanguage('si')">🇱🇰 සිංහල</button>
     </div>
 
     <nav class="breadcrumb">
@@ -221,6 +222,40 @@
         e_sweets_d: "Transition into the party.",
         e_party: "Party & open bar",
         e_party_d: "Dance floor is open!"
+      },
+      si: {
+        programTitle: "දවසේ වැඩසටහන",
+        programIntro: "සෑම විටම කුමක් සිදුවේදැයි දැනගැනීමට සරල කාලසටහනක් (ආසන්න වේලාවන්).",
+        backHome: "මුල් පිටුව",
+        breadcrumbCurrent: "කාලසටහන",
+        nowLabel: "දැන්",
+        nextPrefix: "ඊළඟ:",
+        timelineTitle: "කාලසටහන",
+        footer: "2026 — ආදරයෙන් නිර්මාණය කළේ<br><strong>ෆෙඩෙරිකෝ එරන්දිකා</strong>",
+
+        e_takeSeat: "ආසන ගන්න",
+        e_takeSeat_d: "කරුණාකර වාඩි වන්න: උත්සවය ආරම්භ වීමට ආසන්නයි.",
+        e_ceremony: "උත්සවය",
+        e_ceremony_d: "උත්සවය ආරම්භ වේ; ඉන් පසු කෙටි ඡායාරූප මොහොතක්.",
+        poruwaCta: 'සිදුවෙමින් ඇති දේ ගැන කුතුහලයක්ද? පොරුව උත්සවයේ අර්ථය සොයා ගන්න <img src="../assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
+        e_lamp: "සංකේතාත්මක මොහොත (තෙල් පහන)",
+        e_lamp_d: "කෙටි පිළිගැනීමේ සහ ආශීර්වාද මොහොතක්.",
+        e_aperitif: "පූර්ව බීම",
+        e_aperitif_d: "විවේකය, චීයර්ස්, සහ කතාබහ.",
+        e_champagne: "ෂැම්පේන් දිය ඇල්ල",
+        e_champagne_d: "මනමාලයන් සමඟ විශේෂ පානයක්.",
+        e_room: "ආගන්තුකයින් වාඩි වීම + යුවළගේ පැමිණීම",
+        e_room_d: "කරුණාකර ආසන ගන්න; කෙටි යුවළ පැමිණීමක්.",
+        e_dinner: "රාත්‍රී භෝජනය",
+        e_dinner_d: "මේස සේවය.",
+        e_speeches: "කතා සහ පානයන්",
+        e_speeches_d: "රාත්‍රී භෝජනය අතරතුර කැප වූ මොහොතක්.",
+        e_cake: "කේක් කැපීම",
+        e_cake_d: "ඡායාරූප සහ කේක්!",
+        e_sweets: "මිහිරි බුෆේ",
+        e_sweets_d: "සාද වෙත මාරුව.",
+        e_party: "සාදය සහ විවෘත බාර්",
+        e_party_d: "නැටුම් පිටිය විවෘතයි!"
       }
     };
 
@@ -231,6 +266,7 @@
       const saved = localStorage.getItem('lang');
       if (saved) return saved;
       const browserLang = navigator.language || navigator.userLanguage;
+      if (browserLang && browserLang.startsWith('si')) return 'si';
       return browserLang && browserLang.startsWith('en') ? 'en' : 'it';
     }
 
@@ -330,12 +366,14 @@
         if (mn < s && !next) next = e;
       }
 
+      const waitingText = { it: "In attesa del prossimo momento", en: "Waiting for the next moment", si: "ඊළඟ මොහොත සඳහා බලා සිටිනවා" };
       document.getElementById("nowEvent").textContent =
-        current ? `${current.title} (${range(current)})` : (globalLanguage === 'it' ? "In attesa del prossimo momento" : "Waiting for the next moment");
+        current ? `${current.title} (${range(current)})` : (waitingText[globalLanguage] || waitingText.en);
 
       const t = translations[globalLanguage];
+      const endText = { it: "Prossimo: fine festa", en: "Next: end of party", si: "ඊළඟ: සාදය අවසානය" };
       document.getElementById("nextEvent").textContent =
-        next ? `${t.nextPrefix} ${next.title} — ${next.start}` : (globalLanguage === 'it' ? "Prossimo: fine festa" : "Next: end of party");
+        next ? `${t.nextPrefix} ${next.title} — ${next.start}` : (endText[globalLanguage] || endText.en);
 
       document.querySelectorAll(".tl-row").forEach(row => row.classList.remove("is-now"));
       if (current) {

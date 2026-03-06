@@ -10,7 +10,7 @@
   <meta property="og:title" content="Save the date, here we are! Erandika & Federico 💍">
   <meta property="og:description" content="Scopri tutti i dettagli e conferma la tua presenza">
   <meta property="og:image" content="https://federicoerandika-max.github.io/weddingDay/preview.jpg">
-  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay-test">
+  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/future-updates.css">
@@ -393,6 +393,7 @@
   <div class="lang-switch">
     <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
     <button onclick="setLanguage('en')">🇬🇧 English</button>
+    <button onclick="setLanguage('si')">🇱🇰 සිංහල</button>
   </div>
 
   <h1 id="title"></h1>
@@ -668,6 +669,64 @@ const translations = {
     tfNotFound: 'Name not found, try with first and last name 🤔',
     tfChangeBtn: 'Search another name'
   },
+  si: {
+    title: "අපි විවාහ වෙනවා 💍",
+    countdownTitle: "ලොකු දවසට ඉතිරි කාලය",
+    formTitle: "ඔබේ සහභාගිත්වය තහවුරු කරන්න",
+    location: "ස්ථානය",
+    date: "දිනය සුරකින්න",
+    intro: `
+        ඔව්… මේ ඒක!<br><br>
+        බොහෝ (ගොඩක්!) බලාපොරොත්තුවෙන් පසු, අපට හඬ නඟා කියන්න පුළුවන්:
+        <strong>අපි විවාහ වෙනවා! 👰🏽‍♀️🤵🏾‍♂️</strong><br><br>
+        මෙම පිටුවේ <strong>කෙටි පෝරමයක්</strong> ඇත — සියල්ල හොඳින් සැලසුම් කිරීමට
+        සහ සෑම විස්තරයක්ම සැලකිලිමත් වීමට එය අපට උපකාරී වේ. කරුණාකර
+        <strong>මාර්තු 30 ට පෙර</strong> අපට දන්වන්න:<br><br>
+        මෙතරම් වැදගත් දිනයක ඔබ අප ළඟ සිටීම සියල්ල තවත් විශේෂ කරනු ඇත.<br><br>
+        සැමරීමට, හැඟීම්බර වීමට, සහ මෙම මොහොත ඔබ සමඟ — අප සැබවින්ම
+        ආදරය කරන අය සමඟ — බෙදා ගැනීමට අපි බලා සිටිනවා ❤️✨
+    `,
+    futureUpdates: "උත්සවය පිළිබඳ වැඩිදුර තොරතුරු ඉක්මනින් එනු ඇත.",
+    addHomeTitle: "මුල් පිටුවට එකතු කරන්න 📲",
+    addHomeIntro: "ඔබට මෙම වෙබ් අඩවිය ඔබේ දුරකථනයේ යෙදුමක් ලෙස සුරැකිය හැකිය.",
+    iosSteps: `<strong>Share</strong> <img src="assets/img/share-apple.svg" alt="share icon" width="24" height="24" style="position: relative;top: 6px;" onclick="addToHome()"> ඔබන්න → <strong>Add to Home Screen</strong> → තහවුරු කරන්න.`,
+    androidSteps: "<strong>තිත් තුන</strong> (⋮) ඔබන්න → <strong>Add to Home Screen</strong> → තහවුරු කරන්න.",
+    signature: "එරන්දිකා & ෆෙඩෙරිකෝ",
+    btnLocation: "ස්ථානය",
+    btnDate: "දිනය සුරකින්න",
+    btnGift: "ඔබ අප සමඟ සිටීම ලොකුම තෑග්ගයි. කැමති අයට, මෙහි කුඩා, හෘදයාංගම සිතුවිල්ලක් සඳහා විස්තර ඇත ❤️",
+    giftTitle: "අපට කුඩා සිතුවිල්ලක් 🎁",
+    giftText: "ඔබ අප සමඟ සිටීම ලොකුම තෑග්ගයි.<br><br>කැමති අයට, මෙහි කුඩා, හෘදයාංගම සිතුවිල්ලක් සඳහා විස්තර ඇත ❤️",
+    iban: "IBAN: IT78 L030 6909 4831 0000 001 1214",
+    copy: "පිටපත් කිරීමට ඔබන්න",
+    closeButton: 'වසන්න',
+    name: "ගිණුම් හිමියා: <br> HARIN FEDERICO ATTYGALA",
+    footer: "© 2026 — ආදරයෙන් නිර්මාණය කළේ<br><strong>ෆෙඩෙරිකෝ & එරන්දිකා</strong>",
+    tagAdvice: `අපව ටැග් කරන්න <strong id="tagEra">@erandikaconthrath</strong> සහ <strong id="tagFede">@harinfederico</strong>`,
+    shareOnInstagram: "Instagram වල බෙදා ගන්න 📸",
+    publishedPhotos: `
+      සියලුම ඡායාරූප බෙදා ගන්නේ<br>
+      <strong>#ErandikaFedericoWedding2026</strong>
+    `,
+    hashtagGalleryTitle: "බෙදාගත් මොහොත් ❤️",
+    wedshoots_btn: `
+        ඔබේ ඡායාරූප බෙදා ගන්න 📸<br>
+        <small> (කේතය දැනටමත් පිටපත් කර ඇත, ඔබට එය ඇලවීම පමණයි) </small>
+    `,
+    formRevealed: 'ලොකු දවස පැමිණ ඇත, විශේෂාංග බලන්න, සමරන්න සහ ඔබේ ඡායාරූප අප සමඟ බෙදා ගන්න! 💍✨',
+    timeline: 'උත්සවයේ කාලසටහන 🕒',
+    navGift: 'අපට කුඩා සිතුවිල්ලක් 🎁',
+    navPoruwa: 'පොරුව උත්සවය <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
+    navFAQ: 'නිතර අසන ප්‍රශ්න',
+    navWedshoots: 'Wedshoots බාගත කරන්න <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    tfTitle: 'ඔබේ මේසය සොයන්න <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
+    tfSubtitle: 'ඔබේ ආසනය සොයා ගැනීමට ඔබේ නම ඇතුළත් කරන්න',
+    tfPlaceholder: 'ඔබේ නම...',
+    tfButton: 'සොයන්න',
+    tfResultLabel: 'ඔබ සිටින්නේ',
+    tfNotFound: 'නම හමු නොවීය, මුල් සහ අග නම සමඟ උත්සාහ කරන්න 🤔',
+    tfChangeBtn: 'වෙනත් නමක් සොයන්න'
+  },
   
 };
 
@@ -679,7 +738,9 @@ function detectLanguage() {
   if (saved) return saved;
 
   const browserLang = navigator.language || navigator.userLanguage;
-  return browserLang.startsWith('en') ? 'en' : 'it';
+  if (browserLang.startsWith('si')) return 'si';
+  if (browserLang.startsWith('en')) return 'en';
+  return 'it';
 }
 
 function setLanguage(lang) {
@@ -748,7 +809,7 @@ function applyLanguage(lang) {
   const videoSource = document.getElementById('videoSource');
   var videoPath = 'assets/';
 
-  videoSource.src = videoPath + (lang === 'en' ? 'video-en.mp4' : 'video-it.mp4');
+  videoSource.src = videoPath + (lang === 'it' ? 'video-it.mp4' : 'video-en.mp4');
 
   const video = document.getElementById('weddingVideo');
   const wrapper = document.querySelector('.video-wrapper');
