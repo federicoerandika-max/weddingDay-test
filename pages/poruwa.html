@@ -81,13 +81,40 @@
       font-weight: 500;
     }
 
-    .hero-img {
+    .hero-img-wrapper {
+      position: relative;
       width: 100%;
       max-width: 600px;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
       margin: 20px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      aspect-ratio: 864 / 1232;
+    }
+
+    .hero-img-wrapper .placeholder {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(12px);
+      transform: scale(1.05);
+      transition: opacity .4s ease;
+      z-index: 1;
+    }
+
+    .hero-img-wrapper .placeholder.loaded {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .hero-img {
       display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .intro-text {
@@ -191,7 +218,19 @@
 
     <h1 id="pageTitle"></h1>
 
-    <img class="hero-img" src="../assets/img/poruwa-ceremony-natural.png" alt="Poruwa Ceremony">
+    <div class="hero-img-wrapper">
+      <img class="placeholder" src="data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAABwBACdASoUAB0APzmMvlavKSajsBgIAeAnCWUAx+QE2bvaWX8zKe8JNGFjAADuf+FltuQ5qHPOJV1kj1XQsUxWpYvrIEljX7mJDrQ9KR5m2Srq+4ZbpsYjL0AAAA==" alt="" aria-hidden="true">
+      <picture>
+        <source srcset="../assets/img/poruwa-ceremony-natural.webp" type="image/webp">
+        <img class="hero-img"
+             src="../assets/img/poruwa-ceremony-natural.png"
+             alt="Poruwa Ceremony"
+             width="864" height="1232"
+             fetchpriority="high"
+             decoding="async"
+             onload="this.closest('.hero-img-wrapper').querySelector('.placeholder').classList.add('loaded')">
+      </picture>
+    </div>
 
     <p class="intro-text" id="pageIntro"></p>
 
