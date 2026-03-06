@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="assets/css/photo-share.css">
   <link rel="stylesheet" href="assets/css/gallery.css">
   <link rel="stylesheet" href="assets/css/navbarstyles.css">
+  <link rel="stylesheet" href="assets/css/table-finder.css">
   
   <style>
     [data-aos] {
@@ -413,6 +414,34 @@
   <h2 id="countdownTitle" data-aos="fade-up"></h2>
   <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
 
+  <!-- TABLE FINDER (visibile solo il giorno del matrimonio) -->
+  <section id="tableFinder" class="table-finder hidden" data-aos="fade-up">
+    <h2 id="tfTitle"></h2>
+    <p class="tf-subtitle" id="tfSubtitle"></p>
+
+    <!-- Form di ricerca con autocomplete -->
+    <div class="tf-search-form" id="tfSearchForm">
+      <div class="tf-autocomplete-wrapper">
+        <input type="text" id="tfInput" autocomplete="off">
+        <ul class="tf-dropdown" id="tfDropdown"></ul>
+      </div>
+    </div>
+
+    <!-- Risultato -->
+    <div class="tf-result" id="tfResult">
+      <div class="tf-result-card">
+        <span class="tf-table-icon">🌸</span>
+        <p class="tf-guest-name" id="tfGuestName"></p>
+        <p class="tf-table-name" id="tfTableName"></p>
+      </div>
+      <br>
+      <button class="tf-change-btn" onclick="resetTableFinder()" id="tfChangeBtn"></button>
+    </div>
+
+    <!-- Non trovato -->
+    <p class="tf-not-found" id="tfNotFound"></p>
+  </section>
+
   <!-- TEXT -->
   <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
 
@@ -564,7 +593,14 @@ const translations = {
     timeline: 'Segui la Timeline dell\'evento 🕒',
     navGift: 'Un pensiero per noi 🎁',
     navFAQ: 'Domande frequenti',
-    navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
+    navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    tfTitle: 'Trova il tuo tavolo 🌸',
+    tfSubtitle: 'Inserisci il tuo nome per scoprire dove sei seduto',
+    tfPlaceholder: 'Il tuo nome...',
+    tfButton: 'Cerca',
+    tfResultLabel: 'Sei al',
+    tfNotFound: 'Nome non trovato, prova con nome e cognome 🤔',
+    tfChangeBtn: 'Cerca un altro nome'
   },
   en: {
     title: "We’re getting married 💍",
@@ -613,7 +649,14 @@ const translations = {
     timeline: 'Follow the timeline of the event 🕒',
     navGift: 'A little thought for us 🎁',
     navFAQ: 'Frequently asked questions',
-    navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">'
+    navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    tfTitle: 'Find your table 🌸',
+    tfSubtitle: 'Enter your name to find your seat',
+    tfPlaceholder: 'Your name...',
+    tfButton: 'Search',
+    tfResultLabel: 'You\'re at',
+    tfNotFound: 'Name not found, try with first and last name 🤔',
+    tfChangeBtn: 'Search another name'
   },
   
 };
@@ -674,6 +717,18 @@ function applyLanguage(lang) {
 
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
+  }
+
+  // ── Table Finder translations ──
+  document.getElementById('tfTitle').innerHTML = t.tfTitle;
+  document.getElementById('tfSubtitle').innerHTML = t.tfSubtitle;
+  document.getElementById('tfInput').placeholder = t.tfPlaceholder;
+  document.getElementById('tfNotFound').innerHTML = t.tfNotFound;
+  document.getElementById('tfChangeBtn').innerHTML = t.tfChangeBtn;
+  // Aggiorna label se il risultato è già visibile
+  const savedTable = localStorage.getItem('guestTable');
+  if (savedTable && document.getElementById('tfResult').classList.contains('visible')) {
+    document.getElementById('tfGuestName').textContent = t.tfResultLabel;
   }
 
   const videoSource = document.getElementById('videoSource');
@@ -1053,6 +1108,215 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
   }
 });
+
+/* ================== TABLE FINDER ================== */
+let guestList = [];
+
+function parseCSV(csv) {
+  const lines = csv.trim().split('\n');
+  return lines.slice(1).filter(l => l.trim()).map(line => {
+    const parts = line.split(',').map(s => s.trim());
+    return { nome: parts[0], cognome: parts[1], tavolo: parts[2] };
+  });
+}
+
+function loadGuestList() {
+  // Primo tentativo: fetch (funziona con server locale e GitHub Pages)
+  return fetch('assets/data/guests.csv')
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then(csv => {
+      guestList = parseCSV(csv);
+      console.log('✅ CSV caricato via fetch, ospiti:', guestList.length);
+    })
+    .catch(() => {
+      // Secondo tentativo: XMLHttpRequest (funziona su file:// in alcuni browser)
+      return new Promise((resolve) => {
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', 'assets/data/guests.csv', true);
+          xhr.onload = function() {
+            if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
+              guestList = parseCSV(xhr.responseText);
+              console.log('✅ CSV caricato via XHR, ospiti:', guestList.length);
+            } else {
+              console.warn('⚠️ XHR risposta vuota o errore');
+            }
+            resolve();
+          };
+          xhr.onerror = function() {
+            console.warn('⚠️ XHR fallito');
+            resolve();
+          };
+          xhr.send();
+        } catch(e) {
+          console.warn('⚠️ XHR non supportato', e);
+          resolve();
+        }
+      });
+    });
+}
+
+/* ── Autocomplete ── */
+function setupAutocomplete() {
+  const input = document.getElementById('tfInput');
+  const dropdown = document.getElementById('tfDropdown');
+  let activeIndex = -1;
+
+  input.addEventListener('input', function() {
+    const query = this.value.trim().toLowerCase();
+    dropdown.innerHTML = '';
+    activeIndex = -1;
+
+    if (query.length < 1) {
+      closeDropdown();
+      return;
+    }
+
+    const matches = guestList.filter(g => {
+      const full = (g.nome + ' ' + g.cognome).toLowerCase();
+      return full.includes(query) || g.nome.toLowerCase().startsWith(query) || g.cognome.toLowerCase().startsWith(query);
+    });
+
+    if (matches.length === 0) {
+      closeDropdown();
+      return;
+    }
+
+    matches.forEach((guest, idx) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${guest.nome}</strong> ${guest.cognome}`;
+      li.dataset.index = idx;
+      li.addEventListener('click', () => selectGuest(guest));
+      li.addEventListener('mouseenter', () => {
+        setActive(idx);
+      });
+      dropdown.appendChild(li);
+    });
+
+    openDropdown();
+  });
+
+  // Navigazione da tastiera
+  input.addEventListener('keydown', function(e) {
+    const items = dropdown.querySelectorAll('li');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIndex = Math.min(activeIndex + 1, items.length - 1);
+      setActive(activeIndex);
+      items[activeIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIndex = Math.max(activeIndex - 1, 0);
+      setActive(activeIndex);
+      items[activeIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeIndex >= 0 && items[activeIndex]) {
+        items[activeIndex].click();
+      }
+    } else if (e.key === 'Escape') {
+      closeDropdown();
+      input.blur();
+    }
+  });
+
+  // Chiudi dropdown cliccando fuori
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.tf-autocomplete-wrapper')) {
+      closeDropdown();
+    }
+  });
+
+  function setActive(idx) {
+    const items = dropdown.querySelectorAll('li');
+    items.forEach(li => li.classList.remove('active'));
+    if (items[idx]) {
+      items[idx].classList.add('active');
+      activeIndex = idx;
+    }
+  }
+
+  function openDropdown() {
+    dropdown.classList.add('open');
+    input.classList.add('dropdown-open');
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove('open');
+    input.classList.remove('dropdown-open');
+    activeIndex = -1;
+  }
+}
+
+/* ── Selezione ospite ── */
+function selectGuest(guest) {
+  const fullName = guest.nome + ' ' + guest.cognome;
+  const t = translations[globalLanguage];
+
+  document.getElementById('tfGuestName').textContent = t.tfResultLabel;
+  document.getElementById('tfTableName').textContent = guest.tavolo;
+  document.getElementById('tfResult').classList.add('visible');
+  document.getElementById('tfNotFound').classList.remove('visible');
+  document.getElementById('tfSearchForm').style.display = 'none';
+
+  // Chiudi dropdown
+  document.getElementById('tfDropdown').classList.remove('open');
+  document.getElementById('tfInput').classList.remove('dropdown-open');
+
+  // Salva in localStorage
+  localStorage.setItem('guestName', fullName);
+  localStorage.setItem('guestTable', guest.tavolo);
+  localStorage.setItem('guestFullName', fullName);
+}
+
+function resetTableFinder() {
+  localStorage.removeItem('guestName');
+  localStorage.removeItem('guestTable');
+  localStorage.removeItem('guestFullName');
+
+  document.getElementById('tfResult').classList.remove('visible');
+  document.getElementById('tfNotFound').classList.remove('visible');
+  document.getElementById('tfSearchForm').style.display = 'flex';
+  document.getElementById('tfDropdown').innerHTML = '';
+  document.getElementById('tfInput').value = '';
+  document.getElementById('tfInput').focus();
+}
+
+function initTableFinder() {
+  if (!(dayHasCome() || isTestEnv())) return;
+
+  const section = document.getElementById('tableFinder');
+  section.classList.remove('hidden');
+
+  loadGuestList().then(() => {
+    console.log('📋 guestList dopo caricamento:', guestList.length, 'ospiti', guestList);
+
+    // Se l'utente ha già cercato, mostra il risultato salvato
+    const savedName = localStorage.getItem('guestName');
+    const savedTable = localStorage.getItem('guestTable');
+
+    if (savedName && savedTable) {
+      const t = translations[globalLanguage];
+      document.getElementById('tfGuestName').textContent = t.tfResultLabel;
+      document.getElementById('tfTableName').textContent = savedTable;
+      document.getElementById('tfResult').classList.add('visible');
+      document.getElementById('tfSearchForm').style.display = 'none';
+    }
+
+    // Inizializza autocomplete
+    setupAutocomplete();
+  });
+
+  AOS.refresh();
+}
+
+// init table finder dopo applyLanguage
+initTableFinder();
 
 </script>
 <script src="assets/js/photo-share.js"></script>
