@@ -415,22 +415,14 @@
   </div>
 
   <!-- COUNTDOWN -->
-  <section id="countdownSection">
+   <section id="countdownSection">
     <h2 id="countdownTitle" data-aos="fade-up"></h2>
     <div class="countdown" id="countdown" data-aos="zoom-in" data-aos-delay="300"></div>
-  </section>
-
-  <!-- TEXT -->
-  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
-
-  <br><br>
-  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
-    <span id="signatureText"></span>
-  </div>
-
+   </section>
   
   <!-- TABLE FINDER (visibile solo il giorno del matrimonio) -->
   <section id="tableFinder" class="table-finder hidden" data-aos="fade-up">
+    <br>
     <h2 id="tfTitle"></h2>
     <p class="tf-subtitle" id="tfSubtitle"></p>
 
@@ -456,6 +448,14 @@
     <!-- Non trovato -->
     <p class="tf-not-found" id="tfNotFound"></p>
   </section>
+
+  <!-- TEXT -->
+  <p id="intro" style="margin-top:30px; line-height:1.7;" data-aos="fade-up" data-aos-delay="150"></p>
+
+  <br><br>
+  <div id="signature" data-aos="fade-up" data-aos-anchor="#formTitle" data-aos-delay="300">
+    <span id="signatureText"></span>
+  </div>
 
   <!-- FORM -->
   <h2 id="formTitle" data-aos="fade-up"></h2>
@@ -605,7 +605,7 @@ const translations = {
     tfSubtitle: 'Inserisci il tuo nome per scoprire dove sei seduto',
     tfPlaceholder: 'Il tuo nome...',
     tfButton: 'Cerca',
-    tfResultLabel: 'Sei al',
+    tfResultLabel: 'sei al',
     tfNotFound: 'Nome non trovato, prova con nome e cognome 🤔',
     tfChangeBtn: 'Cerca un altro nome'
   },
@@ -661,7 +661,7 @@ const translations = {
     tfSubtitle: 'Enter your name to find your seat',
     tfPlaceholder: 'Your name...',
     tfButton: 'Search',
-    tfResultLabel: 'You\'re at',
+    tfResultLabel: 'you\'re at',
     tfNotFound: 'Name not found, try with first and last name 🤔',
     tfChangeBtn: 'Search another name'
   },
@@ -734,8 +734,9 @@ function applyLanguage(lang) {
   document.getElementById('tfChangeBtn').innerHTML = t.tfChangeBtn;
   // Aggiorna label se il risultato è già visibile
   const savedTable = localStorage.getItem('guestTable');
-  if (savedTable && document.getElementById('tfResult').classList.contains('visible')) {
-    document.getElementById('tfGuestName').textContent = t.tfResultLabel;
+  const savedFullName = localStorage.getItem('guestFullName');
+  if (savedTable && savedFullName && document.getElementById('tfResult').classList.contains('visible')) {
+    document.getElementById('tfGuestName').textContent = savedFullName + ', ' + t.tfResultLabel;
   }
 
   const videoSource = document.getElementById('videoSource');
@@ -1275,7 +1276,7 @@ function selectGuest(guest) {
   const fullName = guest.nome + ' ' + guest.cognome;
   const t = translations[globalLanguage];
 
-  document.getElementById('tfGuestName').textContent = t.tfResultLabel;
+  document.getElementById('tfGuestName').textContent = fullName + ', ' + t.tfResultLabel;
   document.getElementById('tfTableName').textContent = guest.tavolo;
   document.getElementById('tfResult').classList.add('visible');
   document.getElementById('tfNotFound').classList.remove('visible');
@@ -1321,7 +1322,7 @@ function initTableFinder() {
 
     if (savedName && savedTable) {
       const t = translations[globalLanguage];
-      document.getElementById('tfGuestName').textContent = t.tfResultLabel;
+      document.getElementById('tfGuestName').textContent = savedName + ', ' + t.tfResultLabel;
       document.getElementById('tfTableName').textContent = savedTable;
       document.getElementById('tfResult').classList.add('visible');
       document.getElementById('tfSearchForm').style.display = 'none';
