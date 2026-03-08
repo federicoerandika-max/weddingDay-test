@@ -1247,6 +1247,17 @@ navToggle.addEventListener("click", () => {
   const opened = navLinks.classList.toggle("open");
   navToggle.classList.toggle('active');
   navToggle.setAttribute('aria-expanded', opened);
+
+  if (opened) {
+    // Calcola altezza reale in base ai link visibili
+    navLinks.style.maxHeight = 'none';
+    var realHeight = navLinks.scrollHeight;
+    navLinks.style.maxHeight = '0';
+    // Force reflow
+    navLinks.offsetHeight;
+    navLinks.style.setProperty('--nav-height', realHeight + 'px');
+    navLinks.style.maxHeight = '';
+  }
 });
 
 document.querySelectorAll(".nav-link").forEach(link => {

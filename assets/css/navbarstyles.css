@@ -80,7 +80,7 @@
 }
 
 .nav-links.open {
-  max-height: 420px;
+  max-height: var(--nav-height, 800px);
   padding: 12px;
 }
 

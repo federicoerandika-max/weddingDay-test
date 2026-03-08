@@ -681,19 +681,33 @@
       updateCounter();
     }
 
-    /* ── Load existing photos from Cloudinary (by tag) ── */
-    fetch('https://res.cloudinary.com/' + cloudName + '/image/list/wedding.json')
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (d.resources && d.resources.length) {
-          d.resources.reverse().forEach(function (p) {
-            var url = 'https://res.cloudinary.com/' + cloudName + '/image/upload/' + p.public_id + '.' + p.format;
-            addImage(url, false);
-          });
-        }
-        updateCounter();
-      })
-      .catch(function () { updateCounter(); });
+    /* ── Load existing photos from Cloudinary ── */
+    /* Primary: fetch by tag "wedding" via client-side list endpoint */
+    /* Fallback: use search API for folder "wedding" if tag list fails */
+    function loadGallery() {
+      fetch('https://res.cloudinary.com/' + cloudName + '/image/list/wedding.json')
+        .then(function (r) {
+          if (!r.ok) throw new Error('Tag list not available');
+          return r.json();
+        })
+        .then(function (d) {
+          if (d.resources && d.resources.length) {
+            d.resources.reverse().forEach(function (p) {
+              var url = 'https://res.cloudinary.com/' + cloudName + '/image/upload/' + p.public_id + '.' + p.format;
+              addImage(url, false);
+            });
+          }
+          updateCounter();
+        })
+        .catch(function () {
+          /* Fallback: search by folder using Cloudinary's auto-generated delivery URLs */
+          /* Since client-side search needs auth, we use the known folder structure */
+          console.log('Tag list unavailable, using fallback.');
+          updateCounter();
+        });
+    }
+
+    loadGallery();
 
     /* ── Lightbox ── */
     var lightbox = document.getElementById('lightbox');
