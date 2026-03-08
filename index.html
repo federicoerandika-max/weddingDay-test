@@ -362,6 +362,42 @@
     .hidden {
       display: none !important;
     }
+
+    
+    /* Action buttons */
+    .ig-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0 28px;
+      flex-wrap: wrap;
+    }
+
+    .ig-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 30px;
+      font-size: 15px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .ig-btn-primary {
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+      color: white;
+      box-shadow: 0 6px 20px rgba(169, 131, 74, 0.35);
+    }
+
+    .ig-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(169, 131, 74, 0.4);
+    }
+
   </style>
 </head>
 
@@ -380,6 +416,7 @@
           <a href="index.html" class="nav-link">Home</a>
           <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline 🕒</a>
           <a href="pages/poruwa.html" class="nav-link hidden" id="navPoruwa"></a>
+          <a href="pages/image-upload.html" class="nav-link" id="navImageUpload"></a>
           <a href="pages/gift.html" class="nav-link" id="navGift"></a>
           <a href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1" class="nav-link last" id="navWedshoots"></a>
           <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
@@ -491,7 +528,15 @@
         class="action-btn"
         data-i18n="wedshoots_btn" onclick="onClickShareAPhoto()">
     </button>
+    <br>
     <br>   
+  </div>
+
+  <div style="text-align:center; margin: 20px 0;" data-aos="fade-up">
+    <div class="ig-actions">
+      <button id="imageUploadBtn" class="ig-btn ig-btn-primary" onclick="window.location.href='pages/image-upload.html'">
+      </button>
+    </div>
   </div>
 
   <div class="info-buttons fade-in-up" id="info-buttons">
@@ -599,11 +644,13 @@ const translations = {
       Condividi i tuoi scatti 📸<br>
       <small> (il codice è già copiato dovrai solo incollarlo) </small>
     `,
+    imageUploadBtn: 'Carica i tuoi ricordi con noi 📸',
     formRevealed: 'Il grande giorno è arrivato, scopri tutte le funzionalità, festeggia e condividi le tue foto con noi! 💍✨',
     timeline: 'Segui la Timeline dell\'evento 🕒',
     navGift: 'Un pensiero per noi 🎁',
     navPoruwa: 'La cerimonia del Poruwa <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
     navFAQ: 'Domande frequenti',
+    navImageUpload: 'Carica i tuoi ricordi con noi 📸',
     navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
     tfTitle: 'Trova il tuo tavolo <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
     tfSubtitle: 'Inserisci il tuo nome per scoprire dove sei seduto',
@@ -656,11 +703,13 @@ const translations = {
         Share your photos 📸<br>
         <small> (the code is already copied, you just need to paste it) </small>
     `,
+    imageUploadBtn: 'Upload your memories with us 📸',
     formRevealed: 'The day has come check out the features, celebrate and share your photos with us! 💍✨',
     timeline: 'Follow the timeline of the event 🕒',
     navGift: 'A little thought for us 🎁',
     navPoruwa: 'The Poruwa Ceremony <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
     navFAQ: 'Frequently asked questions',
+    navImageUpload: 'Upload your memories with us 📸',
     navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
     tfTitle: 'Find your table <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="50" height="50" style="place-self: anchor-center;">',
     tfSubtitle: 'Enter your name to find your seat',
@@ -714,11 +763,13 @@ const translations = {
         ඔබේ ඡායාරූප බෙදා ගන්න 📸<br>
         <small> (කේතය දැනටමත් පිටපත් කර ඇත, ඔබට එය ඇලවීම පමණයි) </small>
     `,
+    imageUploadBtn: 'ඔබේ මතක උඩුගත කරන්න 📸',
     formRevealed: 'ලොකු දවස පැමිණ ඇත, විශේෂාංග බලන්න, සමරන්න සහ ඔබේ ඡායාරූප අප සමඟ බෙදා ගන්න! 💍✨',
     timeline: 'උත්සවයේ කාලසටහන 🕒',
     navGift: 'අපට කුඩා සිතුවිල්ලක් 🎁',
     navPoruwa: 'පොරුව උත්සවය <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="26px" height="26px position: relative; top: 6px;" style="place-self: anchor-center;">',
     navFAQ: 'නිතර අසන ප්‍රශ්න',
+    navImageUpload: 'ඔබේ මතක උඩුගත කරන්න 📸',
     navWedshoots: 'Wedshoots බාගත කරන්න <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
     tfTitle: 'ඔබේ මේසය සොයන්න <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
     tfSubtitle: 'ඔබේ ආසනය සොයා ගැනීමට ඔබේ නම ඇතුළත් කරන්න',
@@ -796,6 +847,7 @@ function applyLanguage(lang) {
   document.getElementById('tagAdvice').innerHTML = t.tagAdvice;
   document.getElementById('shareOnInstagram').innerHTML = t.shareOnInstagram;
   document.getElementById('wedshootsBtn').innerHTML = t.wedshoots_btn;
+  document.getElementById('imageUploadBtn').innerHTML = t.imageUploadBtn;
   document.getElementById('publishedPhotos').innerHTML = t.publishedPhotos;
   document.getElementById('hashtagGalleryTitle').innerHTML = t.hashtagGalleryTitle;
   document.getElementById('timeline').innerHTML = t.timeline;
@@ -805,6 +857,9 @@ function applyLanguage(lang) {
   }
   if (document.getElementById('navPoruwa')) {
     document.getElementById('navPoruwa').innerHTML = t.navPoruwa;
+  }
+  if (document.getElementById('navImageUpload')) {
+    document.getElementById('navImageUpload').innerHTML = t.navImageUpload;
   }
 
   if (document.getElementById('footerText')) {
