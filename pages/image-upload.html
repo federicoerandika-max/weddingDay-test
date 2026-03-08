@@ -459,28 +459,291 @@
     <div class="spinner"></div>
     <span id="toastText"></span>
   </div>
-  <footer class="site-footer"><p id="footerText"></p></footer>
+  <footer class="site-footer">
+    <p id="footerText"></p>
+  </footer>
+
   <script>
-    var translations={it:{backHome:'Home',breadcrumbCurrent:'Foto',pageTitle:'I nostri momenti',pageSubtitle:'Condividi i tuoi scatti pi\u00F9 belli',btnCamera:'Scatta una foto',btnUpload:'Carica dalla galleria',emptyText:'Ancora nessuna foto\u2026 sii il primo a condividere!',galleryCounter:'{n} foto condivise',toastUploading:'Caricamento in corso\u2026',toastDone:'Foto caricata! \u2714\uFE0F',footer:'\u00A9 2026 \u2014 Sito realizzato con amore da<br><strong>Federico & Erandika</strong>'},en:{backHome:'Home',breadcrumbCurrent:'Photos',pageTitle:'Our moments',pageSubtitle:'Share your best shots',btnCamera:'Take a photo',btnUpload:'Upload from gallery',emptyText:'No photos yet\u2026 be the first to share!',galleryCounter:'{n} photos shared',toastUploading:'Uploading\u2026',toastDone:'Photo uploaded! \u2714\uFE0F',footer:'\u00A9 2026 \u2014 Website lovingly crafted by<br><strong>Federico & Erandika</strong>'},si:{backHome:'Home',breadcrumbCurrent:'\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4',pageTitle:'\u0D85\u0DB4\u0DDA \u0DB8\u0DDC\u0DC4\u0DDC\u0DAD\u0DCA',pageSubtitle:'\u0D94\u0DB6\u0DDA \u0DC4\u0DDC\u0DB3\u0DB8 \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 \u0DB6\u0DD9\u0DAF\u0DCF \u0D9C\u0DB1\u0DCA\u0DB1',btnCamera:'\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4\u0DBA\u0D9A\u0DCA \u0D9C\u0DB1\u0DCA\u0DB1',btnUpload:'\u0D9C\u0DD0\u0DBD\u0DBB\u0DD2\u0DBA\u0DD9\u0DB1\u0DCA \u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0D9A\u0DBB\u0DB1\u0DCA\u0DB1',emptyText:'\u0DAD\u0DC0\u0DB8 \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 \u0DB1\u0DD0\u0DAD\u2026 \u0DB4\u0DC5\u0DB8\u0DD4\u0DC0\u0DD0\u0DB1\u0DCA\u0DB1\u0DCF \u0DC0\u0DB1\u0DCA\u0DB1!',galleryCounter:'\u0DB6\u0DD9\u0DAF\u0DCF\u0D9C\u0DAD\u0DCA \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 {n}',toastUploading:'\u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0DC0\u0DD9\u0DB8\u0DD2\u0DB1\u0DCA\u2026',toastDone:'\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4\u0DBA \u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0DC0\u0DD2\u0DBA! \u2714\uFE0F',footer:'\u00A9 2026 \u2014 \u0D86\u0DAF\u0DBB\u0DBA\u0DD9\u0DB1\u0DCA \u0DB1\u0DD2\u0DBB\u0DCA\u0DB8\u0DCF\u0DAB\u0DBA \u0D9A\u0DC5\u0DDA<br><strong>\u0DB6\u0DD9\u0DA9\u0DD9\u0DBB\u0DD2\u0D9A\u0DDD & \u0D91\u0DBB\u0DB1\u0DCA\u0DAF\u0DD2\u0D9A\u0DCF</strong>'}};
-    var globalLanguage='it';var photoCount=0;var photoUrls=[];var currentLightboxIndex=-1;
-    function detectLanguage(){var s=localStorage.getItem('lang');if(s)return s;var b=navigator.language||navigator.userLanguage;if(b&&b.startsWith('si'))return'si';return b&&b.startsWith('en')?'en':'it'}
-    function setLanguage(l){localStorage.setItem('lang',l);applyLanguage(l)}
-    function applyLanguage(lang){document.documentElement.lang=lang;globalLanguage=lang;var t=translations[lang];document.getElementById('backHome').textContent=t.backHome;document.getElementById('breadcrumbCurrent').textContent=t.breadcrumbCurrent;document.getElementById('pageTitle').textContent=t.pageTitle;document.getElementById('pageSubtitle').textContent=t.pageSubtitle;document.getElementById('btnCamera').textContent=t.btnCamera;document.getElementById('btnUpload').textContent=t.btnUpload;document.getElementById('emptyText').textContent=t.emptyText;document.getElementById('footerText').innerHTML=t.footer;updateCounter()}
-    function updateCounter(){var t=translations[globalLanguage];var c=document.getElementById('galleryCounter');var e=document.getElementById('emptyState');if(photoCount===0){c.style.display='none';e.style.display='block'}else{c.style.display='block';c.innerHTML=t.galleryCounter.replace('{n}','<strong>'+photoCount+'</strong>');e.style.display='none'}}
-    var cloudName='dxdhalwzf';var uploadPreset='wedding_photos';var gallery=document.getElementById('gallery');
-    var widget=cloudinary.createUploadWidget({cloudName:cloudName,uploadPreset:uploadPreset,folder:'wedding',sources:['local','camera'],multiple:true,maxFiles:10,clientAllowedFormats:['jpg','jpeg','png','heic','webp'],styles:{palette:{window:'#FAFAF7',windowBorder:'#ddd',tabIcon:'#d62976',menuIcons:'#555',textDark:'#262626',textLight:'#FFFFFF',link:'#d62976',action:'#d62976',inactiveTabIcon:'#bbb',error:'#F44235',inProgress:'#d62976',complete:'#20B832',sourceBg:'#F4F4F1'}}},function(error,result){if(result&&result.event==='success'){addImage(result.info.secure_url,true);showToast('done')}});
-    document.getElementById('upload_widget').onclick=function(){widget.open()};
-    document.getElementById('cameraInput').addEventListener('change',function(e){var files=e.target.files;if(!files.length)return;showToast('uploading');var uploaded=0;var total=files.length;Array.from(files).forEach(function(file){var fd=new FormData();fd.append('file',file);fd.append('upload_preset',uploadPreset);fd.append('folder','wedding');fetch('https://api.cloudinary.com/v1_1/'+cloudName+'/image/upload',{method:'POST',body:fd}).then(function(r){return r.json()}).then(function(d){if(d.secure_url)addImage(d.secure_url,true);uploaded++;if(uploaded===total)showToast('done')}).catch(function(err){console.error('Upload error:',err);uploaded++;if(uploaded===total)showToast('done')})});this.value=''});
-    function showToast(state){var toast=document.getElementById('uploadToast');var txt=document.getElementById('toastText');var sp=toast.querySelector('.spinner');var t=translations[globalLanguage];if(state==='uploading'){txt.textContent=t.toastUploading;sp.style.display='block';toast.classList.add('visible')}else{txt.textContent=t.toastDone;sp.style.display='none';setTimeout(function(){toast.classList.remove('visible');sp.style.display='block'},2000)}}
-    function addImage(url,isNew){var div=document.createElement('div');div.className='ig-photo'+(isNew?' new':'');var img=document.createElement('img');img.className='loading';img.src=url;img.loading='lazy';img.alt='Wedding photo';img.onload=function(){img.classList.remove('loading')};var ov=document.createElement('div');ov.className='overlay';ov.innerHTML='<span class="overlay-stat">\u2764\uFE0F</span>';div.appendChild(img);div.appendChild(ov);var idx=photoUrls.length;photoUrls.push(url);div.onclick=function(){openLightbox(idx)};gallery.prepend(div);photoCount++;updateCounter()}
-    fetch('https://res.cloudinary.com/'+cloudName+'/image/list/wedding.json').then(function(r){return r.json()}).then(function(d){if(d.resources&&d.resources.length){d.resources.reverse().forEach(function(p){var url='https://res.cloudinary.com/'+cloudName+'/image/upload/'+p.public_id+'.jpg';addImage(url,false)})}updateCounter()}).catch(function(){updateCounter()});
-    var lightbox=document.getElementById('lightbox');var lightboxImg=document.getElementById('lightbox-img');
-    function openLightbox(idx){currentLightboxIndex=idx;lightboxImg.src=photoUrls[idx];lightbox.classList.add('active');document.body.style.overflow='hidden'}
-    function closeLightbox(){lightbox.classList.remove('active');document.body.style.overflow='';currentLightboxIndex=-1}
-    function navigateLightbox(dir){if(currentLightboxIndex<0)return;var n=currentLightboxIndex+dir;if(n<0)n=photoUrls.length-1;if(n>=photoUrls.length)n=0;currentLightboxIndex=n;lightboxImg.src=photoUrls[n]}
-    lightbox.addEventListener('click',function(e){if(e.target===lightbox)closeLightbox()});
-    document.addEventListener('keydown',function(e){if(!lightbox.classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')navigateLightbox(-1);if(e.key==='ArrowRight')navigateLightbox(1)});
-    var touchStartX=0;lightbox.addEventListener('touchstart',function(e){touchStartX=e.changedTouches[0].screenX},{passive:true});lightbox.addEventListener('touchend',function(e){var diff=e.changedTouches[0].screenX-touchStartX;if(Math.abs(diff)>60)navigateLightbox(diff>0?-1:1)},{passive:true});
+    /* ── Translations ── */
+    var translations = {
+      it: {
+        backHome: 'Home',
+        breadcrumbCurrent: 'Foto',
+        pageTitle: 'I nostri momenti',
+        pageSubtitle: 'Condividi i tuoi scatti pi\u00F9 belli',
+        btnCamera: 'Scatta una foto',
+        btnUpload: 'Carica dalla galleria',
+        emptyText: 'Ancora nessuna foto\u2026 sii il primo a condividere!',
+        galleryCounter: '{n} foto condivise',
+        toastUploading: 'Caricamento in corso\u2026',
+        toastDone: 'Foto caricata! \u2714\uFE0F',
+        footer: '\u00A9 2026 \u2014 Sito realizzato con amore da<br><strong>Federico & Erandika</strong>'
+      },
+      en: {
+        backHome: 'Home',
+        breadcrumbCurrent: 'Photos',
+        pageTitle: 'Our moments',
+        pageSubtitle: 'Share your best shots',
+        btnCamera: 'Take a photo',
+        btnUpload: 'Upload from gallery',
+        emptyText: 'No photos yet\u2026 be the first to share!',
+        galleryCounter: '{n} photos shared',
+        toastUploading: 'Uploading\u2026',
+        toastDone: 'Photo uploaded! \u2714\uFE0F',
+        footer: '\u00A9 2026 \u2014 Website lovingly crafted by<br><strong>Federico & Erandika</strong>'
+      },
+      si: {
+        backHome: 'Home',
+        breadcrumbCurrent: '\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4',
+        pageTitle: '\u0D85\u0DB4\u0DDA \u0DB8\u0DDC\u0DC4\u0DDC\u0DAD\u0DCA',
+        pageSubtitle: '\u0D94\u0DB6\u0DDA \u0DC4\u0DDC\u0DB3\u0DB8 \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 \u0DB6\u0DD9\u0DAF\u0DCF \u0D9C\u0DB1\u0DCA\u0DB1',
+        btnCamera: '\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4\u0DBA\u0D9A\u0DCA \u0D9C\u0DB1\u0DCA\u0DB1',
+        btnUpload: '\u0D9C\u0DD0\u0DBD\u0DBB\u0DD2\u0DBA\u0DD9\u0DB1\u0DCA \u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0D9A\u0DBB\u0DB1\u0DCA\u0DB1',
+        emptyText: '\u0DAD\u0DC0\u0DB8 \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 \u0DB1\u0DD0\u0DAD\u2026 \u0DB4\u0DC5\u0DB8\u0DD4\u0DC0\u0DD0\u0DB1\u0DCA\u0DB1\u0DCF \u0DC0\u0DB1\u0DCA\u0DB1!',
+        galleryCounter: '\u0DB6\u0DD9\u0DAF\u0DCF\u0D9C\u0DAD\u0DCA \u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4 {n}',
+        toastUploading: '\u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0DC0\u0DD9\u0DB8\u0DD2\u0DB1\u0DCA\u2026',
+        toastDone: '\u0DA1\u0DCF\u0DBA\u0DCF\u0DBB\u0DD6\u0DB4\u0DBA \u0D8B\u0DA9\u0DD4\u0D9C\u0DAD \u0DC0\u0DD2\u0DBA! \u2714\uFE0F',
+        footer: '\u00A9 2026 \u2014 \u0D86\u0DAF\u0DBB\u0DBA\u0DD9\u0DB1\u0DCA \u0DB1\u0DD2\u0DBB\u0DCA\u0DB8\u0DCF\u0DAB\u0DBA \u0D9A\u0DC5\u0DDA<br><strong>\u0DB6\u0DD9\u0DA9\u0DD9\u0DBB\u0DD2\u0D9A\u0DDD & \u0D91\u0DBB\u0DB1\u0DCA\u0DAF\u0DD2\u0D9A\u0DCF</strong>'
+      }
+    };
+
+    /* ── State ── */
+    var globalLanguage = 'it';
+    var photoCount = 0;
+    var photoUrls = [];
+    var currentLightboxIndex = -1;
+
+    /* ── Language helpers ── */
+    function detectLanguage() {
+      var s = localStorage.getItem('lang');
+      if (s) return s;
+      var b = navigator.language || navigator.userLanguage;
+      if (b && b.startsWith('si')) return 'si';
+      return b && b.startsWith('en') ? 'en' : 'it';
+    }
+
+    function setLanguage(l) {
+      localStorage.setItem('lang', l);
+      applyLanguage(l);
+    }
+
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      globalLanguage = lang;
+      var t = translations[lang];
+      document.getElementById('backHome').textContent = t.backHome;
+      document.getElementById('breadcrumbCurrent').textContent = t.breadcrumbCurrent;
+      document.getElementById('pageTitle').textContent = t.pageTitle;
+      document.getElementById('pageSubtitle').textContent = t.pageSubtitle;
+      document.getElementById('btnCamera').textContent = t.btnCamera;
+      document.getElementById('btnUpload').textContent = t.btnUpload;
+      document.getElementById('emptyText').textContent = t.emptyText;
+      document.getElementById('footerText').innerHTML = t.footer;
+      updateCounter();
+    }
+
+    function updateCounter() {
+      var t = translations[globalLanguage];
+      var c = document.getElementById('galleryCounter');
+      var e = document.getElementById('emptyState');
+      if (photoCount === 0) {
+        c.style.display = 'none';
+        e.style.display = 'block';
+      } else {
+        c.style.display = 'block';
+        c.innerHTML = t.galleryCounter.replace('{n}', '<strong>' + photoCount + '</strong>');
+        e.style.display = 'none';
+      }
+    }
+
+    /* ── Cloudinary config ── */
+    var cloudName = 'dxdhalwzf';
+    var uploadPreset = 'wedding_photos';
+    var gallery = document.getElementById('gallery');
+
+    /* Upload widget */
+    var widget = cloudinary.createUploadWidget({
+      cloudName: cloudName,
+      uploadPreset: uploadPreset,
+      folder: 'wedding',
+      tags: ['wedding'],
+      sources: ['local', 'camera'],
+      multiple: true,
+      maxFiles: 10,
+      clientAllowedFormats: ['jpg', 'jpeg', 'png', 'heic', 'webp'],
+      styles: {
+        palette: {
+          window: '#FAFAF7',
+          windowBorder: '#ddd',
+          tabIcon: '#c9a96e',
+          menuIcons: '#555',
+          textDark: '#262626',
+          textLight: '#FFFFFF',
+          link: '#c9a96e',
+          action: '#a3834a',
+          inactiveTabIcon: '#bbb',
+          error: '#F44235',
+          inProgress: '#c9a96e',
+          complete: '#20B832',
+          sourceBg: '#F4F4F1'
+        }
+      }
+    }, function (error, result) {
+      if (result && result.event === 'success') {
+        addImage(result.info.secure_url, true);
+        showToast('done');
+      }
+    });
+
+    document.getElementById('upload_widget').onclick = function () { widget.open(); };
+
+    /* Camera capture → direct REST upload */
+    document.getElementById('cameraInput').addEventListener('change', function (e) {
+      var files = e.target.files;
+      if (!files.length) return;
+      showToast('uploading');
+      var uploaded = 0;
+      var total = files.length;
+
+      Array.from(files).forEach(function (file) {
+        var fd = new FormData();
+        fd.append('file', file);
+        fd.append('upload_preset', uploadPreset);
+        fd.append('folder', 'wedding');
+        fd.append('tags', 'wedding');
+
+        fetch('https://api.cloudinary.com/v1_1/' + cloudName + '/image/upload', {
+          method: 'POST',
+          body: fd
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (d.secure_url) addImage(d.secure_url, true);
+          uploaded++;
+          if (uploaded === total) showToast('done');
+        })
+        .catch(function (err) {
+          console.error('Upload error:', err);
+          uploaded++;
+          if (uploaded === total) showToast('done');
+        });
+      });
+
+      this.value = '';
+    });
+
+    /* ── Toast notification ── */
+    function showToast(state) {
+      var toast = document.getElementById('uploadToast');
+      var txt = document.getElementById('toastText');
+      var sp = toast.querySelector('.spinner');
+      var t = translations[globalLanguage];
+
+      if (state === 'uploading') {
+        txt.textContent = t.toastUploading;
+        sp.style.display = 'block';
+        toast.classList.add('visible');
+      } else {
+        txt.textContent = t.toastDone;
+        sp.style.display = 'none';
+        setTimeout(function () {
+          toast.classList.remove('visible');
+          sp.style.display = 'block';
+        }, 2000);
+      }
+    }
+
+    /* ── Add image to gallery ── */
+    function addImage(url, isNew) {
+      var div = document.createElement('div');
+      div.className = 'ig-photo' + (isNew ? ' new' : '');
+
+      var img = document.createElement('img');
+      img.className = 'loading';
+      img.src = url;
+      img.loading = 'lazy';
+      img.alt = 'Wedding photo';
+      img.onload = function () { img.classList.remove('loading'); };
+
+      var ov = document.createElement('div');
+      ov.className = 'overlay';
+      ov.innerHTML = '<span class="overlay-stat">\u2764\uFE0F</span>';
+
+      div.appendChild(img);
+      div.appendChild(ov);
+
+      var idx = photoUrls.length;
+      photoUrls.push(url);
+      div.onclick = function () { openLightbox(idx); };
+
+      gallery.prepend(div);
+      photoCount++;
+      updateCounter();
+    }
+
+    /* ── Load existing photos from Cloudinary (by tag) ── */
+    fetch('https://res.cloudinary.com/' + cloudName + '/image/list/wedding.json')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.resources && d.resources.length) {
+          d.resources.reverse().forEach(function (p) {
+            var url = 'https://res.cloudinary.com/' + cloudName + '/image/upload/' + p.public_id + '.' + p.format;
+            addImage(url, false);
+          });
+        }
+        updateCounter();
+      })
+      .catch(function () { updateCounter(); });
+
+    /* ── Lightbox ── */
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+
+    function openLightbox(idx) {
+      currentLightboxIndex = idx;
+      lightboxImg.src = photoUrls[idx];
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+      currentLightboxIndex = -1;
+    }
+
+    function navigateLightbox(dir) {
+      if (currentLightboxIndex < 0) return;
+      var n = currentLightboxIndex + dir;
+      if (n < 0) n = photoUrls.length - 1;
+      if (n >= photoUrls.length) n = 0;
+      currentLightboxIndex = n;
+      lightboxImg.src = photoUrls[n];
+    }
+
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+
+    /* Swipe support */
+    var touchStartX = 0;
+    lightbox.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', function (e) {
+      var diff = e.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(diff) > 60) navigateLightbox(diff > 0 ? -1 : 1);
+    }, { passive: true });
+
+    /* ── Init ── */
     applyLanguage(detectLanguage());
   </script>
 </body>
