@@ -398,10 +398,184 @@
       box-shadow: 0 10px 28px rgba(169, 131, 74, 0.4);
     }
 
+    /* ================== LOGIN OVERLAY ================== */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(250, 247, 244, 0.97);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .login-overlay.visible {
+      opacity: 1;
+    }
+
+    .login-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .login-card {
+      background: #fff;
+      border-radius: 28px;
+      padding: 48px 36px 40px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+      text-align: center;
+      transform: translateY(30px) scale(0.96);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s,
+                  opacity 0.5s ease 0.15s;
+    }
+
+    .login-overlay.visible .login-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .login-logo {
+      font-size: 48px;
+      margin-bottom: 8px;
+      animation: loginPulse 2.5s infinite;
+    }
+
+    @keyframes loginPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #333;
+      margin: 0 0 6px;
+    }
+
+    .login-subtitle {
+      font-size: 0.92rem;
+      color: #888;
+      margin: 0 0 32px;
+      line-height: 1.5;
+    }
+
+    .login-field {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .login-field input {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid #e8e2dc;
+      border-radius: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      color: #333;
+      background: #faf7f4;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      box-sizing: border-box;
+    }
+
+    .login-field input:focus {
+      border-color: #c9a96e;
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
+    }
+
+    .login-field label {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 15px;
+      color: #aaa;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      background: transparent;
+      padding: 0 4px;
+    }
+
+    .login-field input:focus + label,
+    .login-field input:not(:placeholder-shown) + label {
+      top: -1px;
+      transform: translateY(-50%) scale(0.85);
+      color: #c9a96e;
+      background: #fff;
+      border-radius: 4px;
+    }
+
+    /* Nasconde il placeholder nativo ma lo usa per il selettore :placeholder-shown */
+    .login-field input::placeholder {
+      color: transparent;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 6px 20px rgba(169, 131, 74, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(169, 131, 74, 0.45);
+    }
+
+    .login-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    @media (max-width: 600px) {
+      .login-card {
+        padding: 36px 24px 32px;
+      }
+
+      .login-title {
+        font-size: 1.35rem;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+
+<!-- LOGIN OVERLAY -->
+<div id="loginOverlay" class="login-overlay" style="display:none;">
+  <div class="login-card">
+    <div class="login-logo">💍</div>
+    <h2 class="login-title" id="loginTitle"></h2>
+    <p class="login-subtitle" id="loginSubtitle"></p>
+
+    <form id="loginForm" autocomplete="off">
+      <div class="login-field">
+        <input type="text" id="loginNome" placeholder=" " required autocomplete="given-name" />
+        <label for="loginNome" id="loginNomeLabel"></label>
+      </div>
+      <div class="login-field">
+        <input type="text" id="loginCognome" placeholder=" " required autocomplete="family-name" />
+        <label for="loginCognome" id="loginCognomeLabel"></label>
+      </div>
+      <button type="submit" class="login-btn" id="loginBtn"></button>
+    </form>
+  </div>
+</div>
 
     <header class="navbar hidden" >
         <div class="nav-container">
@@ -417,6 +591,7 @@
           <a href="pages/timeline.html" class="nav-link navTimeline hidden" id="navTimeline">Timeline 🕒</a>
           <a href="pages/poruwa.html" class="nav-link hidden" id="navPoruwa"></a>
           <a href="pages/image-upload.html" class="nav-link" id="navImageUpload"></a>
+          <a href="pages/shuttle.html" class="nav-link hidden" id="navShuttle"></a>
           <a href="pages/gift.html" class="nav-link" id="navGift"></a>
           <a href="https://itunes.apple.com/it/app/wedshoots/id660256196?ls=1" class="nav-link last" id="navWedshoots"></a>
           <!-- <a href="pages/timeline.html" class="nav-link" id="navFAQ"></a> -->
@@ -652,13 +827,19 @@ const translations = {
     navFAQ: 'Domande frequenti',
     navImageUpload: 'Carica i tuoi ricordi con noi 📸',
     navWedshoots: 'Portati avanti e scairca Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    navShuttle: 'Servizio Navetta 🚐',
     tfTitle: 'Trova il tuo tavolo <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
     tfSubtitle: 'Inserisci il tuo nome per scoprire dove sei seduto',
     tfPlaceholder: 'Il tuo nome...',
     tfButton: 'Cerca',
     tfResultLabel: 'sei al',
     tfNotFound: 'Nome non trovato, prova con nome e cognome 🤔',
-    tfChangeBtn: 'Cerca un altro nome'
+    tfChangeBtn: 'Cerca un altro nome',
+    loginTitle: 'Benvenuto!',
+    loginSubtitle: 'Dicci chi sei, così potremo rendere<br>la tua esperienza ancora più speciale ✨',
+    loginNomeLabel: 'Nome',
+    loginCognomeLabel: 'Cognome',
+    loginBtn: 'Entra 💍'
   },
   en: {
     title: "We’re getting married 💍",
@@ -711,13 +892,19 @@ const translations = {
     navFAQ: 'Frequently asked questions',
     navImageUpload: 'Upload your memories with us 📸',
     navWedshoots: 'Get ahead and download Wedshoots <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    navShuttle: 'Shuttle Service 🚐',
     tfTitle: 'Find your table <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="50" height="50" style="place-self: anchor-center;">',
     tfSubtitle: 'Enter your name to find your seat',
     tfPlaceholder: 'Your name...',
     tfButton: 'Search',
     tfResultLabel: 'you\'re at',
     tfNotFound: 'Name not found, try with first and last name 🤔',
-    tfChangeBtn: 'Search another name'
+    tfChangeBtn: 'Search another name',
+    loginTitle: 'Welcome!',
+    loginSubtitle: 'Tell us who you are, so we can make<br>your experience even more special ✨',
+    loginNomeLabel: 'First Name',
+    loginCognomeLabel: 'Last Name',
+    loginBtn: 'Enter 💍'
   },
   si: {
     title: "අපි විවාහ වෙනවා 💍",
@@ -771,13 +958,19 @@ const translations = {
     navFAQ: 'නිතර අසන ප්‍රශ්න',
     navImageUpload: 'ඔබේ මතක උඩුගත කරන්න 📸',
     navWedshoots: 'Wedshoots බාගත කරන්න <img src="assets/img/ico_wedshoots.svg" alt="WedShoots" width="26px" height="26px" style=" position: relative; top: 6px;">',
+    navShuttle: 'ෂටල් සේවාව 🚐',
     tfTitle: 'ඔබේ මේසය සොයන්න <img src="assets/img/white-jasmine-flower.png" class="tf-table-icon" width="30" height="30" style="place-self: anchor-center;">',
     tfSubtitle: 'ඔබේ ආසනය සොයා ගැනීමට ඔබේ නම ඇතුළත් කරන්න',
     tfPlaceholder: 'ඔබේ නම...',
     tfButton: 'සොයන්න',
     tfResultLabel: 'ඔබ සිටින්නේ',
     tfNotFound: 'නම හමු නොවීය, මුල් සහ අග නම සමඟ උත්සාහ කරන්න 🤔',
-    tfChangeBtn: 'වෙනත් නමක් සොයන්න'
+    tfChangeBtn: 'වෙනත් නමක් සොයන්න',
+    loginTitle: 'ආයුබෝවන්!',
+    loginSubtitle: 'ඔබ කවුදැයි අපට කියන්න, එවිට අපට<br>ඔබේ අත්දැකීම තවත් විශේෂ කළ හැකිය ✨',
+    loginNomeLabel: 'මුල් නම',
+    loginCognomeLabel: 'අග නම',
+    loginBtn: 'ඇතුල් වන්න 💍'
   },
   
 };
@@ -861,10 +1054,20 @@ function applyLanguage(lang) {
   if (document.getElementById('navImageUpload')) {
     document.getElementById('navImageUpload').innerHTML = t.navImageUpload;
   }
+  if (document.getElementById('navShuttle')) {
+    document.getElementById('navShuttle').innerHTML = t.navShuttle;
+  }
 
   if (document.getElementById('footerText')) {
     document.getElementById('footerText').innerHTML = t.footer;
   }
+
+  // ── Login overlay translations ──
+  document.getElementById('loginTitle').innerHTML = t.loginTitle;
+  document.getElementById('loginSubtitle').innerHTML = t.loginSubtitle;
+  document.getElementById('loginNomeLabel').innerHTML = t.loginNomeLabel;
+  document.getElementById('loginCognomeLabel').innerHTML = t.loginCognomeLabel;
+  document.getElementById('loginBtn').innerHTML = t.loginBtn;
 
   // ── Table Finder translations ──
   document.getElementById('tfTitle').innerHTML = t.tfTitle;
@@ -966,6 +1169,11 @@ function applyLanguage(lang) {
 
       // ── Salva in localStorage che l'utente ha visitato il sito ──
       localStorage.setItem('hasVisitedBefore', 'true');
+
+      // ── Mostra login overlay se l'utente non si è mai loggato ──
+      if (!isLoggedIn()) {
+        setTimeout(function() { showLoginOverlay(); }, 600);
+      }
     }
   };
 }
@@ -1449,6 +1657,44 @@ function selectGuest(guest) {
   localStorage.setItem('guestFullName', fullName);
 }
 
+/* ── Auto-select dal login: cerca corrispondenza esatta e seleziona ── */
+function autoSelectFromLogin() {
+  if (!guestList || guestList.length === 0) return;
+
+  var loginName = localStorage.getItem('guestLoginName');
+  var loginSurname = localStorage.getItem('guestLoginSurname');
+  if (!loginName || !loginSurname) return;
+
+  var query = (loginName + ' ' + loginSurname).toLowerCase();
+
+  // Cerca corrispondenza esatta (nome + cognome)
+  var exactMatch = guestList.find(function(g) {
+    return (g.nome + ' ' + g.cognome).toLowerCase() === query;
+  });
+
+  if (exactMatch) {
+    selectGuest(exactMatch);
+    return;
+  }
+
+  // Se non c'è match esatto, cerca match parziale unico
+  var matches = guestList.filter(function(g) {
+    var full = (g.nome + ' ' + g.cognome).toLowerCase();
+    return full.includes(loginName.toLowerCase()) && full.includes(loginSurname.toLowerCase());
+  });
+
+  if (matches.length === 1) {
+    selectGuest(matches[0]);
+  } else {
+    // Nessun match unico → pre-popola solo l'input
+    var tfInput = document.getElementById('tfInput');
+    if (tfInput) {
+      tfInput.value = loginName + ' ' + loginSurname;
+      tfInput.dispatchEvent(new Event('input'));
+    }
+  }
+}
+
 function resetTableFinder() {
   localStorage.removeItem('guestName');
   localStorage.removeItem('guestTable');
@@ -1487,6 +1733,11 @@ function initTableFinder() {
 
     // Inizializza autocomplete
     setupAutocomplete();
+
+    // Se l'utente è loggato e non ha già un risultato salvato, auto-seleziona dal login
+    if (!savedName && !savedTable) {
+      autoSelectFromLogin();
+    }
   });
 
   AOS.refresh();
@@ -1494,6 +1745,103 @@ function initTableFinder() {
 
 // init table finder dopo applyLanguage
 initTableFinder();
+
+/* ================== SHUTTLE ACCESS CHECK ================== */
+(function checkShuttleAccess() {
+  var loginName = localStorage.getItem('guestLoginName');
+  var loginSurname = localStorage.getItem('guestLoginSurname');
+  if (!loginName || !loginSurname) return;
+
+  fetch('assets/data/shuttle.csv')
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then(function(csv) {
+      var lines = csv.trim().split('\n');
+      var guests = lines.slice(1).filter(function(l) { return l.trim(); }).map(function(line) {
+        var parts = line.split(',').map(function(s) { return s.trim(); });
+        return (parts[0] + ' ' + parts[1]).toLowerCase();
+      });
+
+      var fullLogin = (loginName + ' ' + loginSurname).toLowerCase();
+      var isAuthorized = guests.some(function(g) {
+        return g === fullLogin || (g.includes(loginName.toLowerCase()) && g.includes(loginSurname.toLowerCase()));
+      });
+
+      if (isAuthorized) {
+        var navShuttle = document.getElementById('navShuttle');
+        if (navShuttle) navShuttle.classList.remove('hidden');
+      }
+    })
+    .catch(function(err) {
+      console.warn('⚠️ Shuttle CSV non disponibile:', err);
+    });
+})();
+
+/* ================== LOGIN OVERLAY ================== */
+function isLoggedIn() {
+  return localStorage.getItem('guestLoginName') && localStorage.getItem('guestLoginSurname');
+}
+
+function showLoginOverlay() {
+  const overlay = document.getElementById('loginOverlay');
+  overlay.style.display = 'flex';
+  // Force reflow before adding class for transition
+  overlay.offsetHeight;
+  overlay.classList.add('visible');
+  document.body.classList.add('lock-scroll');
+}
+
+function hideLoginOverlay() {
+  const overlay = document.getElementById('loginOverlay');
+  overlay.classList.add('fade-out');
+  overlay.classList.remove('visible');
+  document.body.classList.remove('lock-scroll');
+
+  setTimeout(function() {
+    overlay.style.display = 'none';
+    overlay.classList.remove('fade-out');
+  }, 600);
+}
+
+// Form submit handler
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var nome = document.getElementById('loginNome').value.trim();
+  var cognome = document.getElementById('loginCognome').value.trim();
+
+  if (!nome || !cognome) return;
+
+  // Capitalize first letter
+  nome = nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
+  cognome = cognome.charAt(0).toUpperCase() + cognome.slice(1).toLowerCase();
+
+  localStorage.setItem('guestLoginName', nome);
+  localStorage.setItem('guestLoginSurname', cognome);
+
+  hideLoginOverlay();
+
+  // Auto-seleziona tavolo se il table finder è attivo e la guestList è caricata
+  if (guestList && guestList.length > 0) {
+    autoSelectFromLogin();
+  }
+});
+
+// Decide when to show login: check after applyLanguage has run
+(function initLogin() {
+  // If already logged in, do nothing
+  if (isLoggedIn()) return;
+
+  var hasVisited = localStorage.getItem('hasVisitedBefore');
+
+  if (hasVisited) {
+    // Returning visitor, never logged in → show login immediately
+    showLoginOverlay();
+  }
+  // First-time visitor → login will be shown after video ends (see applyLanguage video handlers)
+})();
 
 </script>
 <script src="assets/js/photo-share.js"></script>

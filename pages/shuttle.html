@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Day — Navetta</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="../assets/img/wedding-logo.png">
+  <link rel="apple-touch-icon" href="../assets/img/wedding-logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #faf7f4;
+      color: #333;
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .lang-switch {
+      margin-bottom: 15px;
+    }
+
+    .lang-switch button {
+      border: none;
+      background: white;
+      padding: 8px 14px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 14px 0 22px;
+      padding: 10px 20px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+      color: #888;
+      padding: 4px 2px;
+      transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover {
+      color: #333;
+    }
+
+    .breadcrumb .sep {
+      margin: 0 10px;
+      color: #ccc;
+      font-size: 0.75rem;
+      user-select: none;
+    }
+
+    .breadcrumb .current {
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* Hero section */
+    .shuttle-hero {
+      margin: 10px auto 30px;
+      font-size: 2.8rem;
+    }
+
+    .page-intro {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.85;
+      max-width: 650px;
+      margin: 0 auto 30px;
+    }
+
+    /* Info banner */
+    .shuttle-info {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      margin: 0 auto 30px;
+      max-width: 650px;
+      text-align: left;
+    }
+
+    .shuttle-info h3 {
+      margin: 0 0 12px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .shuttle-info p {
+      margin: 8px 0;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .shuttle-info .highlight {
+      background: #f6f3f0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border-left: 4px solid #c9a96e;
+      margin: 14px 0;
+      font-size: 0.93rem;
+    }
+
+    /* Pickup points list */
+    .pickup-section {
+      margin: 30px auto;
+      max-width: 650px;
+    }
+
+    .pickup-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .pickup-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      margin: 14px 0;
+      text-align: left;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .pickup-card:active {
+      transform: scale(0.98);
+    }
+
+    .pickup-card .pickup-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pickup-card .pickup-time {
+      font-size: 0.88rem;
+      color: #888;
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pickup-card .pickup-address {
+      font-size: 0.92rem;
+      color: #555;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .pickup-map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(169, 131, 74, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pickup-map-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(169, 131, 74, 0.4);
+    }
+
+    /* User greeting */
+    .greeting {
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+      color: white;
+      border-radius: 30px;
+      padding: 10px 22px;
+      display: inline-block;
+      font-size: 0.92rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(169, 131, 74, 0.3);
+    }
+
+    /* Pickup form */
+    .pickup-form {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      margin: 30px auto;
+      max-width: 500px;
+    }
+
+    .pickup-form h3 {
+      margin: 0 0 16px;
+      font-size: 1.05rem;
+    }
+
+    /* Custom dropdown */
+    .custom-select {
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .custom-select-trigger {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      border: 2px solid #e8e2dc;
+      border-radius: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      color: #999;
+      background: #faf7f4;
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      user-select: none;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .custom-select-trigger::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%) rotate(0deg);
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid #999;
+      border-bottom: 2px solid #999;
+      transform-origin: center;
+      transform: translateY(-65%) rotate(45deg);
+      transition: transform 0.25s ease;
+    }
+
+    .custom-select.open .custom-select-trigger::after {
+      transform: translateY(-35%) rotate(-135deg);
+    }
+
+    .custom-select-trigger.has-value {
+      color: #333;
+    }
+
+    .custom-select.open .custom-select-trigger {
+      border-color: #c9a96e;
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .custom-select-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 2px solid #c9a96e;
+      border-top: none;
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+
+    .custom-select.open .custom-select-options {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .custom-select-option {
+      padding: 14px 16px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      color: #555;
+      transition: background 0.15s ease, color 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .custom-select-option:last-child {
+      border-bottom: none;
+    }
+
+    .custom-select-option:hover {
+      background: #faf7f4;
+      color: #333;
+    }
+
+    .custom-select-option.selected {
+      background: linear-gradient(135deg, rgba(201, 169, 110, 0.1), rgba(163, 131, 74, 0.08));
+      color: #a3834a;
+      font-weight: 600;
+    }
+
+    .custom-select-option .opt-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .custom-select-option .opt-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .custom-select-option .opt-name {
+      font-weight: 500;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .custom-select-option .opt-meta {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .custom-select-option.selected .opt-meta {
+      color: #c9a96e;
+    }
+
+    .pickup-form .confirm-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      box-shadow: 0 6px 20px rgba(169, 131, 74, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pickup-form .confirm-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(169, 131, 74, 0.45);
+    }
+
+    .pickup-saved {
+      display: none;
+      background: #f0ebe5;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+
+    .pickup-saved.visible {
+      display: block;
+      animation: fadeSlideUp 0.4s ease;
+    }
+
+    .pickup-change-btn {
+      border: none;
+      background: transparent;
+      color: #a3834a;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Notes */
+    .shuttle-notes {
+      background: #f6f3f0;
+      border-radius: 18px;
+      padding: 20px 24px;
+      max-width: 650px;
+      margin: 30px auto;
+      text-align: left;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .shuttle-notes ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .shuttle-notes li {
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 60px;
+      padding: 30px 20px;
+      background: #f3eee9;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .site-footer strong {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .site-footer p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Email toast */
+    .email-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #fff;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .email-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .email-toast.success {
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+    }
+
+    .email-toast.error {
+      background: linear-gradient(135deg, #e53935, #c62828);
+    }
+
+    .email-toast.sending {
+      background: linear-gradient(135deg, #c9a96e, #a3834a);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- LANGUAGE -->
+    <div class="lang-switch">
+      <button onclick="setLanguage('it')">🇮🇹 Italiano</button>
+      <button onclick="setLanguage('en')">🇬🇧 English</button>
+      <button onclick="setLanguage('si')">🇱🇰 සිංහල</button>
+    </div>
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb">
+      <a href="../index.html" id="backHome">Home</a>
+      <span class="sep">›</span>
+      <span class="current" id="breadcrumbCurrent">Navetta</span>
+    </nav>
+
+    <!-- ACCESS DENIED (shown to non-authorized users) -->
+    <div id="accessDenied" style="display:none;">
+      <div class="shuttle-hero">🔒</div>
+      <h1 id="deniedTitle"></h1>
+      <p class="page-intro" id="deniedText"></p>
+      <a href="../index.html" style="display:inline-block; margin-top:20px; padding:12px 24px; border-radius:30px; background:linear-gradient(135deg,#c9a96e,#a3834a); color:#fff; text-decoration:none; font-weight:500; box-shadow:0 6px 20px rgba(169,131,74,0.35);" id="deniedBackBtn">← Home</a>
+    </div>
+
+    <!-- MAIN CONTENT (shown only to authorized users) -->
+    <div id="shuttleContent" style="display:none;">
+
+    <!-- HERO -->
+    <div class="shuttle-hero">🚐</div>
+    <h1 id="pageTitle"></h1>
+
+    <!-- GREETING -->
+    <div class="greeting" id="greeting" style="display:none;"></div>
+
+    <!-- INTRO -->
+    <p class="page-intro" id="pageIntro"></p>
+
+    <!-- INFO -->
+    <div class="shuttle-info">
+      <h3 id="infoTitle"></h3>
+      <div class="highlight" id="infoHighlight"></div>
+      <p id="infoDetails"></p>
+    </div>
+
+    <!-- PICKUP FORM -->
+    <div class="pickup-form" id="pickupFormSection">
+      <h3 id="formTitle"></h3>
+      <div class="custom-select" id="customSelect">
+        <div class="custom-select-trigger" id="customSelectTrigger" onclick="toggleDropdown()">
+          <span id="formPlaceholder"></span>
+        </div>
+        <div class="custom-select-options" id="customSelectOptions">
+          <!-- Options populated by JS -->
+        </div>
+      </div>
+      <input type="hidden" id="pickupSelect" value="" />
+      <button class="confirm-btn" id="formConfirmBtn" onclick="confirmPickup()"></button>
+    </div>
+
+    <!-- SAVED RESULT -->
+    <div class="pickup-saved" id="pickupSaved">
+      <p id="savedText"></p>
+      <button class="pickup-change-btn" id="savedChangeBtn" onclick="changePickup()"></button>
+    </div>
+
+    <!-- PICKUP POINTS -->
+    <div class="pickup-section" hidden>
+      <h2 id="pickupTitle"></h2>
+      <div id="pickupList"></div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="shuttle-notes" id="shuttleNotes"></div>
+
+    </div><!-- /shuttleContent -->
+
+  </div>
+
+  <footer class="site-footer">
+    <p id="footerText"></p>
+  </footer>
+
+  <div class="email-toast" id="emailToast"></div>
+
+  <script>
+    /* ================== TRANSLATIONS ================== */
+    const translations = {
+      it: {
+        pageTitle: 'Servizio Navetta 🚐',
+        backHome: 'Home',
+        breadcrumbCurrent: 'Navetta',
+        greeting: 'Ciao, {name}! 👋',
+        pageIntro: 'Abbiamo organizzato un servizio navetta per accompagnarvi comodamente alla location e riportarvi a casa a fine serata. Scegliete il punto di ritiro più comodo per voi!',
+        infoTitle: 'Come funziona?',
+        infoHighlight: '🕐 La navetta partirà in orario — vi chiediamo di essere al punto di ritiro <strong>10 minuti prima</strong> dell\'orario indicato.',
+        infoDetails: 'Il servizio è gratuito e disponibile sia per l\'andata che per il ritorno. Selezionate il vostro punto di ritiro preferito qui sotto per aiutarci a organizzare il percorso.',
+        formTitle: 'Dove vuoi farti trovare? 📍',
+        formPlaceholder: 'Seleziona il punto di ritiro...',
+        formConfirmBtn: 'Conferma il mio punto di ritiro ✓',
+        savedTextPrefix: 'Perfetto! Ti aspettiamo a',
+        savedTextSuffix: 'Ricordati di essere lì 10 minuti prima 🕐',
+        savedChangeBtn: 'Cambia punto di ritiro',
+        pickupTitle: 'Punti di ritiro 📍',
+        mapBtn: 'Apri in Maps',
+        emailSending: 'Invio conferma in corso... ✉️',
+        emailSuccess: 'Conferma inviata con successo! ✅',
+        emailError: 'Scelta salvata. Notifica email non riuscita.',
+        pickups: [
+          {
+            name: 'Certosa di Pavia',
+            time: '13:00',
+            address: 'Piazzale della Certosa, 27012 Certosa di Pavia PV',
+            maps: 'https://maps.app.goo.gl/certosa-pavia'
+          },
+          {
+            name: 'Baggio — Milano',
+            time: '12:30',
+            address: 'Piazza Stovani, 20152 Milano MI',
+            maps: 'https://maps.app.goo.gl/baggio-milano'
+          }
+        ],
+        notes: '<strong>📌 Note importanti:</strong><ul><li>La navetta effettuerà il percorso anche al ritorno, a fine serata.</li><li>Se cambiate idea sul punto di ritiro, potete aggiornare la scelta in qualsiasi momento da questa pagina.</li><li>Per chi arriva in auto, il parcheggio gratuito è disponibile presso la location.</li></ul>',
+        footer: '© 2026 — Sito realizzato con amore da<br><strong>Federico & Erandika</strong>',
+        deniedTitle: 'Servizio non disponibile',
+        deniedText: 'Il servizio navetta è riservato a un gruppo ristretto di invitati. Se pensi che sia un errore, contattaci direttamente! ❤️',
+        deniedBackBtn: '← Torna alla Home'
+      },
+      en: {
+        pageTitle: 'Shuttle Service 🚐',
+        backHome: 'Home',
+        breadcrumbCurrent: 'Shuttle',
+        greeting: 'Hi, {name}! 👋',
+        pageIntro: 'We have arranged a shuttle service to take you comfortably to the venue and bring you back at the end of the evening. Choose your most convenient pickup point!',
+        infoTitle: 'How does it work?',
+        infoHighlight: '🕐 The shuttle will depart on time — please be at the pickup point <strong>10 minutes before</strong> the scheduled time.',
+        infoDetails: 'The service is free and available both for the ride there and back. Select your preferred pickup point below to help us plan the route.',
+        formTitle: 'Where should we pick you up? 📍',
+        formPlaceholder: 'Select your pickup point...',
+        formConfirmBtn: 'Confirm my pickup point ✓',
+        savedTextPrefix: 'Perfect! We\'ll see you at',
+        savedTextSuffix: 'Remember to be there 10 minutes early 🕐',
+        savedChangeBtn: 'Change pickup point',
+        pickupTitle: 'Pickup Points 📍',
+        mapBtn: 'Open in Maps',
+        emailSending: 'Sending confirmation... ✉️',
+        emailSuccess: 'Confirmation sent successfully! ✅',
+        emailError: 'Choice saved. Email notification failed.',
+        pickups: [
+          {
+            name: 'Certosa di Pavia',
+            time: '13:00',
+            address: 'Piazzale della Certosa, 27012 Certosa di Pavia PV',
+            maps: 'https://maps.app.goo.gl/certosa-pavia'
+          },
+          {
+            name: 'Baggio — Milan',
+            time: '12:30',
+            address: 'Piazza Stovani, 20152 Milan MI',
+            maps: 'https://maps.app.goo.gl/baggio-milano'
+          }
+        ],
+        notes: '<strong>📌 Important notes:</strong><ul><li>The shuttle will also run the return route at the end of the evening.</li><li>If you change your mind about the pickup point, you can update your choice at any time from this page.</li><li>For those arriving by car, free parking is available at the venue.</li></ul>',
+        footer: '© 2026 — Website lovingly crafted by<br><strong>Federico & Erandika</strong>',
+        deniedTitle: 'Service not available',
+        deniedText: 'The shuttle service is reserved for a selected group of guests. If you think this is a mistake, please contact us directly! ❤️',
+        deniedBackBtn: '← Back to Home'
+      },
+      si: {
+        pageTitle: 'ෂටල් සේවාව 🚐',
+        backHome: 'මුල් පිටුව',
+        breadcrumbCurrent: 'ෂටල්',
+        greeting: 'ආයුබෝවන්, {name}! 👋',
+        pageIntro: 'උත්සව ස්ථානයට සහ ආපසු නිවසට සුවපහසුව සහිතව ගමන් කිරීමට අපි ෂටල් සේවාවක් සංවිධානය කර ඇත. ඔබට වඩාත් පහසු ස්ථානය තෝරන්න!',
+        infoTitle: 'මෙය ක්‍රියා කරන්නේ කෙසේද?',
+        infoHighlight: '🕐 ෂටල් එක නියමිත වේලාවට පිටත් වේ — කරුණාකර නියමිත වේලාවට <strong>විනාඩි 10කට පෙර</strong> එම ස්ථානයේ සිටින්න.',
+        infoDetails: 'මෙම සේවාව නොමිලේ වන අතර යාමට සහ ආපසු ඒමට ලබා ගත හැකිය. මාර්ගය සැලසුම් කිරීමට අපට උපකාර කිරීමට පහතින් ඔබේ කැමති ස්ථානය තෝරන්න.',
+        formTitle: 'අපි ඔබව ගන්නේ කොහෙන්ද? 📍',
+        formPlaceholder: 'ස්ථානය තෝරන්න...',
+        formConfirmBtn: 'මාගේ ස්ථානය තහවුරු කරන්න ✓',
+        savedTextPrefix: 'නියමයි! අපි ඔබව බලාපොරොත්තු වෙනවා',
+        savedTextSuffix: 'විනාඩි 10කට පෙර එහි සිටීමට මතක තබා ගන්න 🕐',
+        savedChangeBtn: 'ස්ථානය වෙනස් කරන්න',
+        pickupTitle: 'රැස්වීම් ස්ථාන 📍',
+        mapBtn: 'Maps හි බලන්න',
+        emailSending: 'තහවුරු කිරීම යවමින්... ✉️',
+        emailSuccess: 'තහවුරු කිරීම සාර්ථකව යවන ලදී! ✅',
+        emailError: 'තේරීම සුරකින ලදී. ඊමේල් දැනුම්දීම අසාර්ථකයි.',
+        pickups: [
+          {
+            name: 'Certosa di Pavia',
+            time: '13:00',
+            address: 'Piazzale della Certosa, 27012 Certosa di Pavia PV',
+            maps: 'https://maps.app.goo.gl/certosa-pavia'
+          },
+          {
+            name: 'Baggio — Milano',
+            time: '12:30',
+            address: 'Piazza Stovani, 20152 Milano MI',
+            maps: 'https://maps.app.goo.gl/baggio-milano'
+          }
+        ],
+        notes: '<strong>📌 වැදගත් සටහන්:</strong><ul><li>ෂටල් එක සවස අවසානයේ ආපසු මාර්ගයද ධාවනය කරයි.</li><li>ඔබ ස්ථානය වෙනස් කිරීමට කැමති නම්, මෙම පිටුවෙන් ඕනෑම වේලාවක යාවත්කාලීන කළ හැකිය.</li><li>මෝටර් රථයෙන් එන අයට, උත්සව ස්ථානයේ නොමිලේ වාහන‍පළ ලබා ගත හැකිය.</li></ul>',
+        footer: '© 2026 — ආදරයෙන් නිර්මාණය කළේ<br><strong>ෆෙඩෙරිකෝ & එරන්දිකා</strong>',
+        deniedTitle: 'සේවාව ලබා ගත නොහැක',
+        deniedText: 'ෂටල් සේවාව තෝරාගත් ආරාධිතයින් කණ්ඩායමකට සීමා වේ. මෙය වැරැද්දක් යැයි ඔබ සිතන්නේ නම්, කරුණාකර අප හා සෘජුවම සම්බන්ධ වන්න! ❤️',
+        deniedBackBtn: '← මුල් පිටුවට'
+      }
+    };
+
+    let globalLanguage;
+
+    /* ================== LANGUAGE ================== */
+    function detectLanguage() {
+      const saved = localStorage.getItem('lang');
+      if (saved) return saved;
+      const browserLang = navigator.language || navigator.userLanguage;
+      if (browserLang && browserLang.startsWith('si')) return 'si';
+      return browserLang && browserLang.startsWith('en') ? 'en' : 'it';
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem('lang', lang);
+      applyLanguage(lang);
+    }
+
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      globalLanguage = lang;
+
+      const t = translations[lang];
+
+      document.getElementById('pageTitle').innerHTML = t.pageTitle;
+      document.getElementById('backHome').textContent = t.backHome;
+      document.getElementById('breadcrumbCurrent').textContent = t.breadcrumbCurrent;
+      document.getElementById('pageIntro').innerHTML = t.pageIntro;
+      document.getElementById('infoTitle').innerHTML = t.infoTitle;
+      document.getElementById('infoHighlight').innerHTML = t.infoHighlight;
+      document.getElementById('infoDetails').innerHTML = t.infoDetails;
+      document.getElementById('formTitle').innerHTML = t.formTitle;
+      document.getElementById('formPlaceholder').textContent = t.formPlaceholder;
+      document.getElementById('formConfirmBtn').innerHTML = t.formConfirmBtn;
+      document.getElementById('savedChangeBtn').textContent = t.savedChangeBtn;
+      document.getElementById('pickupTitle').innerHTML = t.pickupTitle;
+      document.getElementById('shuttleNotes').innerHTML = t.notes;
+      document.getElementById('footerText').innerHTML = t.footer;
+
+      // Access denied translations
+      document.getElementById('deniedTitle').innerHTML = t.deniedTitle;
+      document.getElementById('deniedText').innerHTML = t.deniedText;
+      document.getElementById('deniedBackBtn').textContent = t.deniedBackBtn;
+
+      // Greeting con nome dal login
+      var loginName = localStorage.getItem('guestLoginName');
+      var greetingEl = document.getElementById('greeting');
+      if (loginName) {
+        greetingEl.textContent = t.greeting.replace('{name}', loginName);
+        greetingEl.style.display = 'inline-block';
+      } else {
+        greetingEl.style.display = 'none';
+      }
+
+      // Popola custom dropdown con i pickup points
+      var optionsContainer = document.getElementById('customSelectOptions');
+      var trigger = document.getElementById('customSelectTrigger');
+      var hiddenInput = document.getElementById('pickupSelect');
+      optionsContainer.innerHTML = '';
+
+      t.pickups.forEach(function(p, i) {
+        var optEl = document.createElement('div');
+        optEl.className = 'custom-select-option';
+        optEl.setAttribute('data-value', i);
+        optEl.innerHTML =
+          '<span class="opt-icon">📍</span>' +
+          '<span class="opt-details">' +
+            '<span class="opt-name">' + p.name + '</span>' +
+            '<span class="opt-meta">🕐 ' + p.time + ' — ' + p.address + '</span>' +
+          '</span>';
+        optEl.onclick = function() { selectOption(i, p.name + ' — ' + p.time); };
+        optionsContainer.appendChild(optEl);
+      });
+
+      // Reset trigger text to placeholder if no value selected
+      if (!hiddenInput.value) {
+        trigger.querySelector('span').textContent = t.formPlaceholder;
+        trigger.classList.remove('has-value');
+      }
+
+      // Render pickup cards
+      renderPickupCards(t);
+
+      // Ripristina selezione salvata
+      restoreSavedPickup(t);
+    }
+
+    /* ================== PICKUP CARDS ================== */
+    function renderPickupCards(t) {
+      var container = document.getElementById('pickupList');
+      container.innerHTML = '';
+
+      t.pickups.forEach(function(p) {
+        var card = document.createElement('div');
+        card.className = 'pickup-card';
+        card.innerHTML =
+          '<p class="pickup-name">📍 ' + p.name + '</p>' +
+          '<p class="pickup-time">🕐 ' + p.time + '</p>' +
+          '<p class="pickup-address">' + p.address + '</p>' +
+          '<a href="' + p.maps + '" target="_blank" class="pickup-map-btn">📍 ' + t.mapBtn + '</a>';
+        container.appendChild(card);
+      });
+    }
+
+    /* ================== CUSTOM DROPDOWN ================== */
+    function toggleDropdown() {
+      var wrapper = document.getElementById('customSelect');
+      wrapper.classList.toggle('open');
+    }
+
+    function selectOption(value, label) {
+      var hiddenInput = document.getElementById('pickupSelect');
+      var trigger = document.getElementById('customSelectTrigger');
+      var wrapper = document.getElementById('customSelect');
+
+      hiddenInput.value = value;
+      trigger.querySelector('span').textContent = label;
+      trigger.classList.add('has-value');
+
+      // Evidenzia opzione selezionata
+      var allOpts = document.querySelectorAll('.custom-select-option');
+      allOpts.forEach(function(o) {
+        o.classList.toggle('selected', o.getAttribute('data-value') == value);
+      });
+
+      // Chiudi dropdown
+      wrapper.classList.remove('open');
+    }
+
+    // Chiudi dropdown se si clicca fuori
+    document.addEventListener('click', function(e) {
+      var wrapper = document.getElementById('customSelect');
+      if (wrapper && !wrapper.contains(e.target)) {
+        wrapper.classList.remove('open');
+      }
+    });
+
+    /* ================== PICKUP SELECTION ================== */
+    function confirmPickup() {
+      var select = document.getElementById('pickupSelect');
+      var idx = select.value;
+      if (idx === '') return;
+
+      var t = translations[globalLanguage];
+      var pickup = t.pickups[parseInt(idx)];
+
+      localStorage.setItem('shuttlePickup', JSON.stringify({
+        index: parseInt(idx),
+        name: pickup.name,
+        time: pickup.time,
+        address: pickup.address
+      }));
+
+      showSavedResult(t, pickup);
+      sendPickupEmail(t, pickup);
+    }
+
+    /* ================== EMAIL NOTIFICATION ================== */
+    function showEmailToast(message, type) {
+      var toast = document.getElementById('emailToast');
+      toast.textContent = message;
+      toast.className = 'email-toast ' + type + ' visible';
+
+      if (type !== 'sending') {
+        setTimeout(function() {
+          toast.classList.remove('visible');
+        }, 4000);
+      }
+    }
+
+    function sendPickupEmail(t, pickup) {
+      var guestName = localStorage.getItem('guestLoginName') || 'Ospite';
+      var guestSurname = localStorage.getItem('guestLoginSurname') || '';
+
+      showEmailToast(t.emailSending, 'sending');
+
+      var templateParams = {
+        guest_name:     guestName,
+        guest_surname:  guestSurname,
+        pickup_name:    pickup.name,
+        pickup_time:    pickup.time,
+        pickup_address: pickup.address,
+        date:           new Date().toLocaleString('it-IT')
+      };
+
+      emailjs.send('service_yg55ava', 'template_yeuuxq4', templateParams, 'en-oVQDO9rihCNub3')
+        .then(function() {
+          showEmailToast(t.emailSuccess, 'success');
+        })
+        .catch(function(err) {
+          console.warn('EmailJS error:', err);
+          showEmailToast(t.emailError, 'error');
+        });
+    }
+
+    function showSavedResult(t, pickup) {
+      document.getElementById('pickupFormSection').style.display = 'none';
+
+      var savedEl = document.getElementById('pickupSaved');
+      document.getElementById('savedText').innerHTML =
+        t.savedTextPrefix + ' <strong>' + pickup.name + '</strong> alle <strong>' + pickup.time + '</strong>.<br>' +
+        t.savedTextSuffix;
+      savedEl.classList.add('visible');
+    }
+
+    function changePickup() {
+      localStorage.removeItem('shuttlePickup');
+      document.getElementById('pickupSaved').classList.remove('visible');
+      document.getElementById('pickupFormSection').style.display = 'block';
+      document.getElementById('pickupSelect').value = '';
+
+      // Reset custom dropdown
+      var trigger = document.getElementById('customSelectTrigger');
+      var t = translations[globalLanguage];
+      trigger.querySelector('span').textContent = t.formPlaceholder;
+      trigger.classList.remove('has-value');
+      var allOpts = document.querySelectorAll('.custom-select-option');
+      allOpts.forEach(function(o) { o.classList.remove('selected'); });
+    }
+
+    function restoreSavedPickup(t) {
+      var saved = localStorage.getItem('shuttlePickup');
+      if (!saved) {
+        document.getElementById('pickupFormSection').style.display = 'block';
+        document.getElementById('pickupSaved').classList.remove('visible');
+        return;
+      }
+
+      try {
+        var data = JSON.parse(saved);
+        var pickup = t.pickups[data.index];
+        if (pickup) {
+          // Pre-seleziona nel custom dropdown
+          document.getElementById('pickupSelect').value = data.index;
+          var trigger = document.getElementById('customSelectTrigger');
+          trigger.querySelector('span').textContent = pickup.name + ' — ' + pickup.time;
+          trigger.classList.add('has-value');
+          var allOpts = document.querySelectorAll('.custom-select-option');
+          allOpts.forEach(function(o) {
+            o.classList.toggle('selected', o.getAttribute('data-value') == data.index);
+          });
+          showSavedResult(t, pickup);
+        }
+      } catch (e) {
+        document.getElementById('pickupFormSection').style.display = 'block';
+      }
+    }
+
+    /* ================== ACCESS CONTROL ================== */
+    var shuttleGuests = [];
+
+    function parseCSV(csv) {
+      var lines = csv.trim().split('\n');
+      return lines.slice(1).filter(function(l) { return l.trim(); }).map(function(line) {
+        var parts = line.split(',').map(function(s) { return s.trim(); });
+        return { nome: parts[0], cognome: parts[1] };
+      });
+    }
+
+    function isUserAuthorized() {
+      var loginName = localStorage.getItem('guestLoginName');
+      var loginSurname = localStorage.getItem('guestLoginSurname');
+      if (!loginName || !loginSurname) return false;
+
+      var fullLogin = (loginName + ' ' + loginSurname).toLowerCase();
+
+      return shuttleGuests.some(function(g) {
+        var fullGuest = (g.nome + ' ' + g.cognome).toLowerCase();
+        // Match esatto
+        if (fullGuest === fullLogin) return true;
+        // Match parziale (nome contenuto e cognome contenuto)
+        if (fullGuest.includes(loginName.toLowerCase()) && fullGuest.includes(loginSurname.toLowerCase())) return true;
+        return false;
+      });
+    }
+
+    function loadShuttleGuests() {
+      return fetch('../assets/data/shuttle.csv')
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.text();
+        })
+        .then(function(csv) {
+          shuttleGuests = parseCSV(csv);
+          console.log('✅ Shuttle CSV caricato, ospiti autorizzati:', shuttleGuests.length);
+        })
+        .catch(function() {
+          // Fallback XHR per file://
+          return new Promise(function(resolve) {
+            try {
+              var xhr = new XMLHttpRequest();
+              xhr.open('GET', '../assets/data/shuttle.csv', true);
+              xhr.onload = function() {
+                if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
+                  shuttleGuests = parseCSV(xhr.responseText);
+                  console.log('✅ Shuttle CSV caricato via XHR, ospiti:', shuttleGuests.length);
+                }
+                resolve();
+              };
+              xhr.onerror = function() { resolve(); };
+              xhr.send();
+            } catch(e) { resolve(); }
+          });
+        });
+    }
+
+    /* ================== INIT ================== */
+    applyLanguage(detectLanguage());
+
+    // Controlla accesso dopo aver caricato il CSV
+    loadShuttleGuests().then(function() {
+      if (isUserAuthorized()) {
+        document.getElementById('shuttleContent').style.display = 'block';
+        document.getElementById('accessDenied').style.display = 'none';
+      } else {
+        document.getElementById('shuttleContent').style.display = 'none';
+        document.getElementById('accessDenied').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
