@@ -10,7 +10,7 @@
   <meta property="og:title" content="Save the date, here we are! Erandika & Federico 💍">
   <meta property="og:description" content="Scopri tutti i dettagli e conferma la tua presenza">
   <meta property="og:image" content="https://federicoerandika-max.github.io/weddingDay/preview.jpg">
-  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay-test">
+  <meta property="og:url" content="https://federicoerandika-max.github.io/weddingDay">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/future-updates.css">
@@ -551,6 +551,41 @@
       }
     }
 
+    /* RSVP Confirmed Banner */
+    .rsvp-confirmed {
+      background: linear-gradient(135deg, #f5f0e8, #faf7f4);
+      border: 2px solid #d4c5a9;
+      border-radius: 20px;
+      padding: 32px 24px;
+      margin: 20px auto;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(201, 169, 110, 0.12);
+    }
+
+    .rsvp-confirmed.hidden {
+      display: none;
+    }
+
+    .rsvp-confirmed-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .rsvp-confirmed h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: #a3834a;
+      margin: 0 0 10px;
+    }
+
+    .rsvp-confirmed p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.6;
+      margin: 0;
+    }
+
   </style>
 </head>
 
@@ -682,6 +717,13 @@
       marginheight="0"
       marginwidth="0">
     </iframe>
+  </div>
+
+  <!-- RSVP CONFIRMED BANNER -->
+  <div id="rsvpConfirmed" class="rsvp-confirmed hidden" data-aos="fade-up">
+    <div class="rsvp-confirmed-icon">✅</div>
+    <h3 id="rsvpConfirmedTitle"></h3>
+    <p id="rsvpConfirmedText"></p>
   </div>
   
 
@@ -835,6 +877,9 @@ const translations = {
     tfResultLabel: 'sei al',
     tfNotFound: 'Nome non trovato, prova con nome e cognome 🤔',
     tfChangeBtn: 'Cerca un altro nome',
+    tableNotAssigned: 'Il tuo tavolo non è ancora stato assegnato. Ricontrolla più tardi o chiedi agli sposi 😊',
+    rsvpConfirmedTitle: 'Presenza confermata! 🎉',
+    rsvpConfirmedText: 'Grazie per aver compilato il modulo, la tua risposta è stata registrata. Non vediamo l\'ora di averti con noi!',
     loginTitle: 'Benvenuto!',
     loginSubtitle: 'Dicci chi sei, così potremo rendere<br>la tua esperienza ancora più speciale ✨',
     loginNomeLabel: 'Nome',
@@ -900,6 +945,9 @@ const translations = {
     tfResultLabel: 'you\'re at',
     tfNotFound: 'Name not found, try with first and last name 🤔',
     tfChangeBtn: 'Search another name',
+    tableNotAssigned: 'Your table hasn\'t been assigned yet. Check back later or ask the newlyweds 😊',
+    rsvpConfirmedTitle: 'Attendance confirmed! 🎉',
+    rsvpConfirmedText: 'Thank you for filling out the form, your response has been recorded. We can\'t wait to have you with us!',
     loginTitle: 'Welcome!',
     loginSubtitle: 'Tell us who you are, so we can make<br>your experience even more special ✨',
     loginNomeLabel: 'First Name',
@@ -966,6 +1014,9 @@ const translations = {
     tfResultLabel: 'ඔබ සිටින්නේ',
     tfNotFound: 'නම හමු නොවීය, මුල් සහ අග නම සමඟ උත්සාහ කරන්න 🤔',
     tfChangeBtn: 'වෙනත් නමක් සොයන්න',
+    tableNotAssigned: 'ඔබේ මේසය තවම පවරා නැත. පසුව නැවත පරීක්ෂා කරන්න හෝ මනමාලයන්ගෙන් අසන්න 😊',
+    rsvpConfirmedTitle: 'සහභාගිත්වය තහවුරු කරන ලදී! 🎉',
+    rsvpConfirmedText: 'පෝරමය පිරවීම ගැන ස්තුතියි, ඔබේ පිළිතුර වාර්තා කර ඇත. ඔබ අප සමඟ සිටීම අපි බලාපොරොත්තුවෙන් සිටිමු!',
     loginTitle: 'ආයුබෝවන්!',
     loginSubtitle: 'ඔබ කවුදැයි අපට කියන්න, එවිට අපට<br>ඔබේ අත්දැකීම තවත් විශේෂ කළ හැකිය ✨',
     loginNomeLabel: 'මුල් නම',
@@ -1004,6 +1055,10 @@ function applyLanguage(lang) {
   document.getElementById('intro').innerHTML = t.intro;
   document.getElementById('countdownTitle').innerHTML = t.countdownTitle;
   document.getElementById('formTitle').innerHTML = t.formTitle;
+
+  // ── RSVP Confirmed banner translations ──
+  document.getElementById('rsvpConfirmedTitle').textContent = t.rsvpConfirmedTitle;
+  document.getElementById('rsvpConfirmedText').textContent = t.rsvpConfirmedText;
 
   // ── Switch Google Form in base alla lingua ──
   const rsvpIframe = document.getElementById('rsvpIframe');
@@ -1078,8 +1133,21 @@ function applyLanguage(lang) {
   // Aggiorna label se il risultato è già visibile
   const savedTable = localStorage.getItem('guestTable');
   const savedFullName = localStorage.getItem('guestFullName');
-  if (savedTable && savedFullName && document.getElementById('tfResult').classList.contains('visible')) {
-    document.getElementById('tfGuestName').textContent = savedFullName + ', ' + t.tfResultLabel;
+  if (savedFullName && document.getElementById('tfResult').classList.contains('visible')) {
+    const hasTable = savedTable && savedTable.trim() !== '';
+    if (hasTable) {
+      document.getElementById('tfGuestName').textContent = savedFullName + ', ' + t.tfResultLabel;
+      document.getElementById('tfTableName').textContent = savedTable;
+      document.getElementById('tfTableName').style.color = '';
+      document.getElementById('tfTableName').style.fontSize = '';
+      document.getElementById('tfTableName').style.fontWeight = '';
+    } else {
+      document.getElementById('tfGuestName').textContent = savedFullName;
+      document.getElementById('tfTableName').textContent = t.tableNotAssigned;
+      document.getElementById('tfTableName').style.color = '#c9a96e';
+      document.getElementById('tfTableName').style.fontSize = '0.95rem';
+      document.getElementById('tfTableName').style.fontWeight = '400';
+    }
   }
 
   const videoSource = document.getElementById('videoSource');
@@ -1288,6 +1356,9 @@ setInterval(updateCountdown, 1000);
 /* INIT */
 applyLanguage(detectLanguage());
 
+// Ripristina stato RSVP confermato per visitatori di ritorno
+restoreRsvpState();
+
 /* Wait till the video fade out */
 setTimeout(() => {
     dragDownGiftHandler();
@@ -1494,51 +1565,65 @@ document.querySelectorAll('.nav-link').forEach(link => {
 
 /* ================== TABLE FINDER ================== */
 let guestList = [];
+var GUESTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=762749412&single=true&output=csv';
 
 function parseCSV(csv) {
   const lines = csv.trim().split('\n');
   return lines.slice(1).filter(l => l.trim()).map(line => {
     const parts = line.split(',').map(s => s.trim());
-    return { nome: parts[0], cognome: parts[1], tavolo: parts[2] };
+    return { nome: parts[0], cognome: parts[1], tavolo: parts[2] || '' };
   });
 }
 
 function loadGuestList() {
-  // Primo tentativo: fetch (funziona con server locale e GitHub Pages)
-  return fetch('assets/data/guests.csv')
+  // Primo tentativo: Google Sheet pubblicato
+  return fetch(GUESTS_SHEET_URL)
     .then(res => {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.text();
     })
     .then(csv => {
       guestList = parseCSV(csv);
-      console.log('✅ CSV caricato via fetch, ospiti:', guestList.length);
+      console.log('✅ Guest CSV caricato da Google Sheet, ospiti:', guestList.length);
     })
-    .catch(() => {
-      // Secondo tentativo: XMLHttpRequest (funziona su file:// in alcuni browser)
-      return new Promise((resolve) => {
-        try {
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', 'assets/data/guests.csv', true);
-          xhr.onload = function() {
-            if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
-              guestList = parseCSV(xhr.responseText);
-              console.log('✅ CSV caricato via XHR, ospiti:', guestList.length);
-            } else {
-              console.warn('⚠️ XHR risposta vuota o errore');
+    .catch(err => {
+      console.warn('⚠️ Google Sheet non raggiungibile, fallback locale:', err);
+      // Secondo tentativo: file CSV locale
+      return fetch('assets/data/guests.csv')
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.text();
+        })
+        .then(csv => {
+          guestList = parseCSV(csv);
+          console.log('✅ Guest CSV caricato da file locale, ospiti:', guestList.length);
+        })
+        .catch(() => {
+          // Ultimo fallback: XHR per file://
+          return new Promise((resolve) => {
+            try {
+              const xhr = new XMLHttpRequest();
+              xhr.open('GET', 'assets/data/guests.csv', true);
+              xhr.onload = function() {
+                if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
+                  guestList = parseCSV(xhr.responseText);
+                  console.log('✅ Guest CSV caricato via XHR, ospiti:', guestList.length);
+                } else {
+                  console.warn('⚠️ XHR risposta vuota o errore');
+                }
+                resolve();
+              };
+              xhr.onerror = function() {
+                console.warn('⚠️ XHR fallito');
+                resolve();
+              };
+              xhr.send();
+            } catch(e) {
+              console.warn('⚠️ XHR non supportato', e);
+              resolve();
             }
-            resolve();
-          };
-          xhr.onerror = function() {
-            console.warn('⚠️ XHR fallito');
-            resolve();
-          };
-          xhr.send();
-        } catch(e) {
-          console.warn('⚠️ XHR non supportato', e);
-          resolve();
-        }
-      });
+          });
+        });
     });
 }
 
@@ -1640,9 +1725,21 @@ function setupAutocomplete() {
 function selectGuest(guest) {
   const fullName = guest.nome + ' ' + guest.cognome;
   const t = translations[globalLanguage];
+  const hasTable = guest.tavolo && guest.tavolo.trim() !== '';
 
-  document.getElementById('tfGuestName').textContent = fullName + ', ' + t.tfResultLabel;
-  document.getElementById('tfTableName').textContent = guest.tavolo;
+  if (hasTable) {
+    document.getElementById('tfGuestName').textContent = fullName + ', ' + t.tfResultLabel;
+    document.getElementById('tfTableName').textContent = guest.tavolo;
+    document.getElementById('tfTableName').style.display = '';
+  } else {
+    document.getElementById('tfGuestName').textContent = fullName;
+    document.getElementById('tfTableName').textContent = t.tableNotAssigned;
+    document.getElementById('tfTableName').style.display = '';
+    document.getElementById('tfTableName').style.color = '#c9a96e';
+    document.getElementById('tfTableName').style.fontSize = '0.95rem';
+    document.getElementById('tfTableName').style.fontWeight = '400';
+  }
+
   document.getElementById('tfResult').classList.add('visible');
   document.getElementById('tfNotFound').classList.remove('visible');
   document.getElementById('tfSearchForm').style.display = 'none';
@@ -1653,8 +1750,35 @@ function selectGuest(guest) {
 
   // Salva in localStorage
   localStorage.setItem('guestName', fullName);
-  localStorage.setItem('guestTable', guest.tavolo);
+  localStorage.setItem('guestTable', guest.tavolo || '');
   localStorage.setItem('guestFullName', fullName);
+}
+
+/* ── RSVP confermato: nasconde il form e mostra il banner ── */
+function markRsvpConfirmed() {
+  if (localStorage.getItem('guestName') !== null) {
+    localStorage.setItem('rsvpConfirmed', 'true');
+
+    var moduleForm = document.getElementById('moduleForm');
+    var formTitle = document.getElementById('formTitle');
+    var intro = document.getElementById('intro');
+    var banner = document.getElementById('rsvpConfirmed');
+
+    if (moduleForm) moduleForm.style.display = 'none';
+    if (formTitle) formTitle.style.display = 'none';
+    if (intro) intro.style.display = 'none';
+    if (!(dayHasCome() || isTestEnv()) && banner) {
+      banner.classList.remove('hidden');
+    }
+  }
+  
+}
+
+/* ── Ripristina stato RSVP confermato (al caricamento pagina) ── */
+function restoreRsvpState() {
+  if (localStorage.getItem('rsvpConfirmed') === 'true') {
+    markRsvpConfirmed();
+  }
 }
 
 /* ── Auto-select dal login: cerca corrispondenza esatta e seleziona ── */
@@ -1706,29 +1830,58 @@ function resetTableFinder() {
   document.getElementById('tfDropdown').innerHTML = '';
   document.getElementById('tfInput').value = '';
   document.getElementById('tfInput').focus();
+
+  // Reset custom styles per "tavolo non assegnato"
+  var tableNameEl = document.getElementById('tfTableName');
+  tableNameEl.style.color = '';
+  tableNameEl.style.fontSize = '';
+  tableNameEl.style.fontWeight = '';
+
+  // Ripristina form RSVP
+  var moduleForm = document.getElementById('moduleForm');
+  var formTitle = document.getElementById('formTitle');
+  var intro = document.getElementById('intro');
+  var banner = document.getElementById('rsvpConfirmed');
+  if (moduleForm) moduleForm.style.display = '';
+  if (formTitle) formTitle.style.display = '';
+  if (intro) intro.style.display = '';
+  if (banner) banner.classList.add('hidden');
 }
 
 function initTableFinder() {
-  if (!(dayHasCome() || isTestEnv())){ 
-    return; // non inizializza se il giorno non è ancora arrivato
-  };
-
-  const section = document.getElementById('tableFinder');
-  section.classList.remove('hidden');
-
   loadGuestList().then(() => {
+    // Ospite già trovato → RSVP confermato
+    markRsvpConfirmed();
+    
+    if (!(dayHasCome() || isTestEnv())){ 
+      return; // non inizializza se il giorno non è ancora arrivato
+    };
+
+    const section = document.getElementById('tableFinder');
+    section.classList.remove('hidden');
+
     console.log('📋 guestList dopo caricamento:', guestList.length, 'ospiti', guestList);
 
     // Se l'utente ha già cercato, mostra il risultato salvato
     const savedName = localStorage.getItem('guestName');
     const savedTable = localStorage.getItem('guestTable');
 
-    if (savedName && savedTable) {
+    if (savedName) {
       const t = translations[globalLanguage];
-      document.getElementById('tfGuestName').textContent = savedName + ', ' + t.tfResultLabel;
-      document.getElementById('tfTableName').textContent = savedTable;
+      const hasTable = savedTable && savedTable.trim() !== '';
+      if (hasTable) {
+        document.getElementById('tfGuestName').textContent = savedName + ', ' + t.tfResultLabel;
+        document.getElementById('tfTableName').textContent = savedTable;
+      } else {
+        document.getElementById('tfGuestName').textContent = savedName;
+        document.getElementById('tfTableName').textContent = t.tableNotAssigned;
+        document.getElementById('tfTableName').style.color = '#c9a96e';
+        document.getElementById('tfTableName').style.fontSize = '0.95rem';
+        document.getElementById('tfTableName').style.fontWeight = '400';
+      }
       document.getElementById('tfResult').classList.add('visible');
       document.getElementById('tfSearchForm').style.display = 'none';
+
     }
 
     // Inizializza autocomplete
@@ -1752,30 +1905,51 @@ initTableFinder();
   var loginSurname = localStorage.getItem('guestLoginSurname');
   if (!loginName || !loginSurname) return;
 
-  fetch('assets/data/shuttle.csv')
+  var SHUTTLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=1040290849&single=true&output=csv';
+
+  function processShuttleCSV(csv) {
+    var lines = csv.trim().split('\n');
+    var guests = lines.slice(1).filter(function(l) { return l.trim(); }).map(function(line) {
+      var parts = line.split(',').map(function(s) { return s.trim(); });
+      return (parts[0] + ' ' + parts[1]).toLowerCase();
+    });
+
+    var fullLogin = (loginName + ' ' + loginSurname).toLowerCase();
+    var isAuthorized = guests.some(function(g) {
+      return g === fullLogin || (g.includes(loginName.toLowerCase()) && g.includes(loginSurname.toLowerCase()));
+    });
+
+    if (isAuthorized) {
+      // TODO decomment when shuttle is ready and booked
+      /* var navShuttle = document.getElementById('navShuttle');
+      if (navShuttle) navShuttle.classList.remove('hidden'); */
+    }
+  }
+
+  // Primo tentativo: Google Sheet
+  fetch(SHUTTLE_SHEET_URL)
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.text();
     })
     .then(function(csv) {
-      var lines = csv.trim().split('\n');
-      var guests = lines.slice(1).filter(function(l) { return l.trim(); }).map(function(line) {
-        var parts = line.split(',').map(function(s) { return s.trim(); });
-        return (parts[0] + ' ' + parts[1]).toLowerCase();
-      });
-
-      var fullLogin = (loginName + ' ' + loginSurname).toLowerCase();
-      var isAuthorized = guests.some(function(g) {
-        return g === fullLogin || (g.includes(loginName.toLowerCase()) && g.includes(loginSurname.toLowerCase()));
-      });
-
-      if (isAuthorized) {
-        var navShuttle = document.getElementById('navShuttle');
-        if (navShuttle) navShuttle.classList.remove('hidden');
-      }
+      console.log('✅ Shuttle access check da Google Sheet');
+      processShuttleCSV(csv);
     })
     .catch(function(err) {
-      console.warn('⚠️ Shuttle CSV non disponibile:', err);
+      console.warn('⚠️ Google Sheet non raggiungibile, fallback locale:', err);
+      // Fallback: file CSV locale
+      fetch('assets/data/shuttle.csv')
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.text();
+        })
+        .then(function(csv) {
+          processShuttleCSV(csv);
+        })
+        .catch(function(err2) {
+          console.warn('⚠️ Shuttle CSV non disponibile:', err2);
+        });
     });
 })();
 
@@ -1826,6 +2000,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   // Auto-seleziona tavolo se il table finder è attivo e la guestList è caricata
   if (guestList && guestList.length > 0) {
     autoSelectFromLogin();
+    markRsvpConfirmed();
   }
 });
 

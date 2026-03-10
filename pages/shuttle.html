@@ -988,33 +988,49 @@
       });
     }
 
+    var SHUTTLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=1040290849&single=true&output=csv';
+
     function loadShuttleGuests() {
-      return fetch('../assets/data/shuttle.csv')
+      // Primo tentativo: Google Sheet pubblicato
+      return fetch(SHUTTLE_SHEET_URL)
         .then(function(res) {
           if (!res.ok) throw new Error('HTTP ' + res.status);
           return res.text();
         })
         .then(function(csv) {
           shuttleGuests = parseCSV(csv);
-          console.log('✅ Shuttle CSV caricato, ospiti autorizzati:', shuttleGuests.length);
+          console.log('✅ Shuttle CSV caricato da Google Sheet, ospiti autorizzati:', shuttleGuests.length);
         })
-        .catch(function() {
-          // Fallback XHR per file://
-          return new Promise(function(resolve) {
-            try {
-              var xhr = new XMLHttpRequest();
-              xhr.open('GET', '../assets/data/shuttle.csv', true);
-              xhr.onload = function() {
-                if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
-                  shuttleGuests = parseCSV(xhr.responseText);
-                  console.log('✅ Shuttle CSV caricato via XHR, ospiti:', shuttleGuests.length);
-                }
-                resolve();
-              };
-              xhr.onerror = function() { resolve(); };
-              xhr.send();
-            } catch(e) { resolve(); }
-          });
+        .catch(function(err) {
+          console.warn('⚠️ Google Sheet non raggiungibile, fallback al file locale:', err);
+          // Fallback: file CSV locale
+          return fetch('../assets/data/shuttle.csv')
+            .then(function(res) {
+              if (!res.ok) throw new Error('HTTP ' + res.status);
+              return res.text();
+            })
+            .then(function(csv) {
+              shuttleGuests = parseCSV(csv);
+              console.log('✅ Shuttle CSV caricato da file locale, ospiti:', shuttleGuests.length);
+            })
+            .catch(function() {
+              // Ultimo fallback: XHR per file://
+              return new Promise(function(resolve) {
+                try {
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', '../assets/data/shuttle.csv', true);
+                  xhr.onload = function() {
+                    if ((xhr.status === 200 || xhr.status === 0) && xhr.responseText) {
+                      shuttleGuests = parseCSV(xhr.responseText);
+                      console.log('✅ Shuttle CSV caricato via XHR, ospiti:', shuttleGuests.length);
+                    }
+                    resolve();
+                  };
+                  xhr.onerror = function() { resolve(); };
+                  xhr.send();
+                } catch(e) { resolve(); }
+              });
+            });
         });
     }
 
