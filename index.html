@@ -816,6 +816,10 @@
   
 <script>
   
+/* ================== GOOGLE SHEET URLs ================== */
+var GUESTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=762749412&single=true&output=csv';
+var RSVP_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=1436105538&single=true&output=csv';
+var SHUTTLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=1040290849&single=true&output=csv';
   
 /* ================== TRANSLATIONS ================== */
 const translations = {
@@ -1565,7 +1569,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
 
 /* ================== TABLE FINDER ================== */
 let guestList = [];
-var GUESTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=762749412&single=true&output=csv';
 
 function parseCSV(csv) {
   const lines = csv.trim().split('\n');
@@ -1755,30 +1758,89 @@ function selectGuest(guest) {
 }
 
 /* ── RSVP confermato: nasconde il form e mostra il banner ── */
-function markRsvpConfirmed() {
-  if (localStorage.getItem('guestName') !== null) {
-    localStorage.setItem('rsvpConfirmed', 'true');
 
-    var moduleForm = document.getElementById('moduleForm');
-    var formTitle = document.getElementById('formTitle');
-    var intro = document.getElementById('intro');
-    var banner = document.getElementById('rsvpConfirmed');
+function showRsvpConfirmedBanner() {
+  var moduleForm = document.getElementById('moduleForm');
+  var formTitle = document.getElementById('formTitle');
+  var intro = document.getElementById('intro');
+  var banner = document.getElementById('rsvpConfirmed');
 
-    if (moduleForm) moduleForm.style.display = 'none';
-    if (formTitle) formTitle.style.display = 'none';
-    if (intro) intro.style.display = 'none';
-    if (!(dayHasCome() || isTestEnv()) && banner) {
-      banner.classList.remove('hidden');
-    }
-  }
-  
+  if (moduleForm) moduleForm.style.display = 'none';
+  if (formTitle) formTitle.style.display = 'none';
+  if (intro) intro.style.display = 'none';
+  if (banner) banner.classList.remove('hidden');
+}
+
+function hideRsvpConfirmedBanner() {
+  var moduleForm = document.getElementById('moduleForm');
+  var formTitle = document.getElementById('formTitle');
+  var intro = document.getElementById('intro');
+  var banner = document.getElementById('rsvpConfirmed');
+
+  if (moduleForm) moduleForm.style.display = '';
+  if (formTitle) formTitle.style.display = '';
+  if (intro) intro.style.display = '';
+  if (banner) banner.classList.add('hidden');
+}
+
+function checkRsvpFromSheet() {
+  var loginName = localStorage.getItem('guestLoginName');
+  var loginSurname = localStorage.getItem('guestLoginSurname');
+  if (!loginName || !loginSurname) return;
+
+  var fullLogin = (loginName + ' ' + loginSurname).toLowerCase().trim();
+
+  fetch(RSVP_SHEET_URL)
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.text();
+    })
+    .then(function(csv) {
+      var lines = csv.trim().split('\n');
+      // Prima riga è header, le successive sono nomi (campo unico nome+cognome)
+      var confirmedGuests = lines.slice(1)
+        .filter(function(l) { return l.trim(); })
+        .map(function(l) { return l.trim().replace(/^"|"$/g, '').toLowerCase().trim(); });
+
+      console.log('✅ RSVP sheet caricato, presenze confermate:', confirmedGuests.length, confirmedGuests);
+      console.log('🔍 Cerco match per:', fullLogin);
+
+      var isConfirmed = confirmedGuests.some(function(name) {
+        if (name === fullLogin) return true;
+        // Match parziale: login contenuto nel nome o viceversa
+        if (name.includes(fullLogin) || fullLogin.includes(name)) return true;
+        // Match per singole parole (nome e cognome)
+        if (name.includes(loginName.toLowerCase()) && name.includes(loginSurname.toLowerCase())) return true;
+        return false;
+      });
+
+      if (isConfirmed) {
+        localStorage.setItem('rsvpConfirmed', 'true');
+        showRsvpConfirmedBanner();
+        console.log('✅ RSVP confermato per:', fullLogin);
+      } else {
+        localStorage.removeItem('rsvpConfirmed');
+        hideRsvpConfirmedBanner();
+        console.log('ℹ️ RSVP non trovato per:', fullLogin);
+      }
+    })
+    .catch(function(err) {
+      console.warn('⚠️ RSVP sheet non raggiungibile:', err);
+      // Se non raggiungibile, usa il cache localStorage
+      if (localStorage.getItem('rsvpConfirmed') === 'true') {
+        showRsvpConfirmedBanner();
+      }
+    });
 }
 
 /* ── Ripristina stato RSVP confermato (al caricamento pagina) ── */
 function restoreRsvpState() {
+  // Mostra subito dal cache per non far vedere il form un istante
   if (localStorage.getItem('rsvpConfirmed') === 'true') {
-    markRsvpConfirmed();
+    showRsvpConfirmedBanner();
   }
+  // Poi verifica in tempo reale dal Google Sheet
+  checkRsvpFromSheet();
 }
 
 /* ── Auto-select dal login: cerca corrispondenza esatta e seleziona ── */
@@ -1836,23 +1898,10 @@ function resetTableFinder() {
   tableNameEl.style.color = '';
   tableNameEl.style.fontSize = '';
   tableNameEl.style.fontWeight = '';
-
-  // Ripristina form RSVP
-  var moduleForm = document.getElementById('moduleForm');
-  var formTitle = document.getElementById('formTitle');
-  var intro = document.getElementById('intro');
-  var banner = document.getElementById('rsvpConfirmed');
-  if (moduleForm) moduleForm.style.display = '';
-  if (formTitle) formTitle.style.display = '';
-  if (intro) intro.style.display = '';
-  if (banner) banner.classList.add('hidden');
 }
 
 function initTableFinder() {
   loadGuestList().then(() => {
-    // Ospite già trovato → RSVP confermato
-    markRsvpConfirmed();
-    
     if (!(dayHasCome() || isTestEnv())){ 
       return; // non inizializza se il giorno non è ancora arrivato
     };
@@ -1905,8 +1954,6 @@ initTableFinder();
   var loginSurname = localStorage.getItem('guestLoginSurname');
   if (!loginName || !loginSurname) return;
 
-  var SHUTTLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTv0sAQizXGMHHs1H4HWGJbU0IxfBtETmMXL9xjddaYy-laAelScz4M_rv9poFMKQ/pub?gid=1040290849&single=true&output=csv';
-
   function processShuttleCSV(csv) {
     var lines = csv.trim().split('\n');
     var guests = lines.slice(1).filter(function(l) { return l.trim(); }).map(function(line) {
@@ -1921,8 +1968,8 @@ initTableFinder();
 
     if (isAuthorized) {
       // TODO decomment when shuttle is ready and booked
-      /* var navShuttle = document.getElementById('navShuttle');
-      if (navShuttle) navShuttle.classList.remove('hidden'); */
+      var navShuttle = document.getElementById('navShuttle');
+      if (navShuttle) navShuttle.classList.remove('hidden');
     }
   }
 
@@ -2000,8 +2047,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   // Auto-seleziona tavolo se il table finder è attivo e la guestList è caricata
   if (guestList && guestList.length > 0) {
     autoSelectFromLogin();
-    markRsvpConfirmed();
   }
+
+  // Controlla RSVP dal foglio Google dopo il login
+  checkRsvpFromSheet();
 });
 
 // Decide when to show login: check after applyLanguage has run
